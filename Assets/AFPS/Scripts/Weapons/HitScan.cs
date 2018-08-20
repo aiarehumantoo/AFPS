@@ -63,11 +63,6 @@ public class HitScan : MonoBehaviour
         timer = timeBetweenBullets; // Start without cooldown
     }
 
-    private void Start()
-    {
-        
-    }
-
     void Update()
     {
         // Add the time since Update was last called to the timer.

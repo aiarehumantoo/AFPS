@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbea6f10b8d3784eafc67c0e0f56c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagePerShot: 30
+  damagePerShot: 50
   timeBetweenBullets: 1.5
   range: 100
   beam: 1
