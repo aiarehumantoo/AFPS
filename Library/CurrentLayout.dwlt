@@ -109,7 +109,7 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 492}
   m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
-  controlID: 9
+  controlID: 38
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 10
+  controlID: 39
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 221}
   m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
-  controlID: 11
+  controlID: 40
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -398,9 +398,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
+    m_SelectedIDs: 28070000
     m_LastClickedID: 0
-    m_ExpandedIDs: 50e8e0ff76e8e0ff78e8e0ff5004e1ff5604e1ff7c04e1ff7e04e1ff004ce1ff0e4ce1ff264ce1ffec5ee1ff125fe1ff145fe1ffae6de1ffbc6de1ffd46de1ff7c7be1ffa27be1ffa47be1ffaea5e1ffd4a5e1ffd6a5e1ffe8cbe1fff6cbe1ff0ecce1ff48ede1ff6eede1ff70ede1ff760fe2ff9c0fe2ff9e0fe2ff3073e2ff5673e2ff5873e2ffbce0e2ffcae0e2ffe2e0e2ffb002e3ffd602e3ffd802e3ff6e7fe3ff7c7fe3ff947fe3ff6ab1e3ff78b1e3ff90b1e3ff2414e4ff3214e4ff4a14e4ff4841e5ff5641e5ff6e41e5ff2a6ce5ff386ce5ff506ce5ff06aae5ff14aae5ff2caae5ffdebce5ffecbce5ff04bde5ff9ad1e5ffa8d1e5ffc0d1e5ff26fce5ff34fce5ff4cfce5ff6468e6ff7268e6ff8a68e6ff88a5e6ff96a5e6ffaea5e6ffcecae6ffdccae6fff4cae6ff38dee6ff5edee6ff60dee6ff2e10e7ff3410e7ff5a10e7ff5c10e7ff6a43e7ff9043e7ff9243e7ffcc90e9ffda90e9fff290e9ffa0e3e9ffaee3e9ffc6e3e9ff4a36eaff5836eaff7036eaff5275eaff6075eaff7875eaff1e94eaff2c94eaff4494eaff4438edff5238edff6a38edff8e42efff9c42efffb442efff9260efffa060efffb860efff121ff0ff201ff0ff381ff0ff5c64f0ff6a64f0ff8264f0ffd88ff0ffe68ff0fffe8ff0ff9e16f1ffac16f1ffc416f1ff0a97f1ff1897f1ff3097f1ffb0b2f1ffbeb2f1ffd6b2f1ff4c03f2ff5a03f2ff7203f2ff88b5f2ff96b5f2ffaeb5f2fffedef2ff24dff2ff26dff2ffce61f3fff461f3fff661f3ff3a02f6ff6002f6ff6202f6ff34f0feff08fbffff9efbffff00000000322d0000682d0000f82e0000
+    m_ExpandedIDs: 9efbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -456,9 +456,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 23.803879, y: -4.709222, z: -0.878049}
+    m_Target: {x: 3.4867344, y: -7.6171875, z: -3.736847}
     speed: 2
-    m_Value: {x: 23.803879, y: -4.709222, z: -0.878049}
+    m_Value: {x: 3.4867344, y: -7.6171875, z: -3.736847}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -482,9 +482,9 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.23490906, y: 0.4917753, z: -0.13972093, w: 0.8267121}
+    m_Target: {x: -0.10942763, y: -0.89048404, z: 0.31935254, w: -0.30508658}
     speed: 2
-    m_Value: {x: 0.23490906, y: 0.4917753, z: -0.13972093, w: 0.8267121}
+    m_Value: {x: -0.10942763, y: -0.89048404, z: 0.31935254, w: -0.30508658}
   m_Size:
     m_Target: 34.16533
     speed: 2
@@ -566,19 +566,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/AFPS/Prefabs/Player
+    - Assets/AFPS
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/AFPS/Prefabs/Player
+  - Assets/AFPS
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Program Files\Unity projects\AFPS
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 73}
-    m_SelectedIDs: 442b0000
-    m_LastClickedID: 11076
-    m_ExpandedIDs: 00000000a0280000c4280000c62800003e29000086290000522b0000c82b00002a2c0000983100009a3100009c3100009e310000a0310000a2310000a431000000ca9a3bffffff7f
+    m_SelectedIDs: 40290000
+    m_LastClickedID: 10560
+    m_ExpandedIDs: 00000000a2280000c6280000c82800004029000088290000622b0000da2b00003e2c0000f8310000fa310000fc310000fe31000000320000023200000432000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -606,7 +606,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a0280000c4280000c62800003e29000086290000522b0000c82b00002a2c0000983100009a3100009c3100009e310000a0310000a2310000a4310000
+    m_ExpandedIDs: 00000000a2280000c6280000c82800004029000088290000622b0000da2b00003e2c0000f8310000fa310000fc310000fe310000003200000232000004320000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
