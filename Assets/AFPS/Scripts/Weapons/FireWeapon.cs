@@ -12,12 +12,16 @@ public class FireWeapon : MonoBehaviour
     public float range = 100f;                             // The distance the gun can fire.
     Vector3 knockback;
     float knockbackForce = 100f;
+    public int weaponSlot = 0;
 
     [Header("Projectile")]
     public bool projectile;
     public GameObject projectilePrefab;             // Prefab of the projectile
     int spawnDistance = 2;                          // How far from the player projectile should spawn
     public int projectileSpeed = 25;
+    public float splashRadius;
+    public float maximumSplashDamage;
+    float projectileLifeTime = 2.0f;                // For deleting projectiles that hit nothing
 
     [Header("SFX")]
     public bool beam;                                   // Does this weapon use beam sfx?
@@ -28,11 +32,11 @@ public class FireWeapon : MonoBehaviour
 
 
     private AudioSource m_AudioSource;
-    LineRenderer beamLine;
+    private LineRenderer beamLine;
 
     Transform camera;                                       //camera location for shooting
 
-    float timer;                                    // A timer to determine when to fire.
+    public float timer;                                    // A timer to determine when to fire.
     Ray shootRay = new Ray();                       // A ray from the gun end forwards.
     RaycastHit shootHit;                            // A raycast hit to get information about what was hit.
     int shootableMask;                              // A layer mask so the raycast only hits things on the shootable layer.
@@ -140,8 +144,8 @@ public class FireWeapon : MonoBehaviour
         // Spawn the bullet on the Clients
         //NetworkServer.Spawn(projectile);
 
-        // Destroy the bullet after 5 seconds
-        Destroy(projectile, 5.0f);
+        // Destroy the bullet after x seconds
+        Destroy(projectile, projectileLifeTime);
     }
 
     void FireHitScan()
@@ -163,7 +167,7 @@ public class FireWeapon : MonoBehaviour
         // Perform the raycast against gameobjects on the shootable layer and if it hits something...
         if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
         {
-            // Try and find an EnemyHealth script on the gameobject hit.
+            // Try and find an Health script on the gameobject hit.
             TargetDummy targetDummy = shootHit.collider.GetComponent<TargetDummy>();
 
             if (targetDummy != null)
@@ -172,7 +176,17 @@ public class FireWeapon : MonoBehaviour
 
                 // ... the enemy should take damage.
                 targetDummy.TakeDamage(damagePerShot, knockback);
-                PlayHitSounds();
+
+                // Hp drops to 0 after taking damage
+                if (targetDummy.currentHealth <= 0)
+                {
+                    PlayHitSounds(true);
+                }
+                else
+                {
+                    PlayHitSounds(false);
+                }
+
             }
 
             // If the Health component exist...
@@ -183,7 +197,16 @@ public class FireWeapon : MonoBehaviour
 
                 // ... the enemy should take damage.
                 playerHealth.TakeDamage(damagePerShot, knockback);
-                PlayHitSounds();
+
+                // Hp drops to 0 after taking damage
+                if (playerHealth.currentHealth <= 0)
+                {
+                    PlayHitSounds(true);
+                }
+                else
+                {
+                    PlayHitSounds(false);
+                }
             }
 
             // Set the second position of the line renderer to the point the raycast hit.
@@ -207,16 +230,18 @@ public class FireWeapon : MonoBehaviour
         }
     }
 
-    public void PlayHitSounds()
+    public void PlayHitSounds(bool kill)
     {
-        // pick & play a random jump sound from the array,
-        // excluding sound at index 0
-        //int n = Random.Range(1, m_HitSounds.Length);
-        m_AudioSource.clip = m_HitSounds[0];
-        m_AudioSource.PlayOneShot(m_AudioSource.clip);
-        // move picked sound to index 0 so it's not picked next time
-        //m_HitSounds[n] = m_HitSounds[0];
-        //m_HitSounds[0] = m_AudioSource.clip;
+        if(kill) //killshot
+        {
+            m_AudioSource.clip = m_HitSounds[1];
+            m_AudioSource.PlayOneShot(m_AudioSource.clip);
+        }
+        else // normal hit
+        {
+            m_AudioSource.clip = m_HitSounds[0];
+            m_AudioSource.PlayOneShot(m_AudioSource.clip);
+        }
     }
 
     private void Impact()

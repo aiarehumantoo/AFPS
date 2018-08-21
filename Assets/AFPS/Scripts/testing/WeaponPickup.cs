@@ -10,15 +10,17 @@ public class WeaponPickup : MonoBehaviour
 
     GameObject pickupAnim;
 
-    bool once = false;  //for testing
-
     float timer;
     public float cooldown = 5.0f;          // cooldown
+
+    // For saving weapons
+    GameObject[] weapons;
 
     private void Awake()
     {
         pickupAnim = Instantiate(pickup);
         pickupAnim.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+        pickupAnim.transform.parent = transform;    // Set pickup animation as a child object
 
         timer = cooldown;   // Start without cooldown
     }
@@ -55,7 +57,7 @@ public class WeaponPickup : MonoBehaviour
                 GO.transform.parent = other.transform.GetChild(0).GetChild(0);
                 GO.transform.position = GO.transform.parent.position;
                 GO.transform.rotation = GO.transform.parent.rotation;
-                GO.gameObject.transform.SetSiblingIndex(weaponSlot);
+                //GO.gameObject.transform.SetSiblingIndex(weaponSlot);
             }
             else
             {

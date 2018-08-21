@@ -18,12 +18,10 @@ public class Projectile : MonoBehaviour
      * Same properties as for hitscan weapons
      *      "enemy" & "environment" layers
      *      
-     * Audio component (hitsound) in parent (weapon)?
-     *      trigger when projectile hits enemy
      * 
      * Splash damage & sfx
      * 
-     * inherit stats from weapon
+     *
      * 
      */
 
@@ -40,21 +38,35 @@ public class Projectile : MonoBehaviour
         TargetDummy targetDummy = hit.GetComponent<TargetDummy>();
         if (targetDummy != null)
         {
-            //knockback = transform.forward * knockbackForce;
-
             // ... the enemy should take damage.
             targetDummy.TakeDamage(damagePerShot, knockback);
-            //PlayHitSounds();
-            parentScript.PlayHitSounds();
+
+            // Hp drops to 0 after taking damage
+            if (targetDummy.currentHealth <= 0)
+            {
+                parentScript.PlayHitSounds(true);
+            }
+            else
+            {
+                parentScript.PlayHitSounds(false);
+            }
         }
         PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
-            //knockback = transform.forward * knockbackForce;
-
             // ... the enemy should take damage.
             playerHealth.TakeDamage(damagePerShot, knockback);
-            //PlayHitSounds();
+
+            // Hp drops to 0 after taking damage
+            if (playerHealth.currentHealth <= 0)
+            {
+                parentScript.PlayHitSounds(true);
+            }
+            else
+            {
+                parentScript.PlayHitSounds(false);
+            }
+
         }
 
         Destroy(gameObject);

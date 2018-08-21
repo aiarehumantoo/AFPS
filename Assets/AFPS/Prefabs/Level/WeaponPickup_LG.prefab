@@ -122,5 +122,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon: {fileID: 1320765342165628, guid: 56513c3a639a84c42993c71a79fc89cb, type: 2}
   pickup: {fileID: 1994216774399832, guid: 18bec4027bff08d468914bd0e4b875d0, type: 2}
-  weaponSlot: 1
+  weaponSlot: 2
   cooldown: 5

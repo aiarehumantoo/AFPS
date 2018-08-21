@@ -249,17 +249,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fbea6f10b8d3784eafc67c0e0f56c74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damagePerShot: 50
+  damagePerShot: 90
   timeBetweenBullets: 1.5
   range: 100
+  weaponSlot: 4
   projectile: 0
   projectilePrefab: {fileID: 0}
   projectileSpeed: 25
+  splashRadius: 0
+  maximumSplashDamage: 0
   beam: 1
   effectDisplayTime: 0.1
   impactEffect: {fileID: 198000277327293096}
   m_HitSounds:
+  - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
   - {fileID: 8300000, guid: 62b33c04e6a8b104da1eab29fcc04f52, type: 3}
+  timer: 0
 --- !u!120 &120916672380983934
 LineRenderer:
   m_ObjectHideFlags: 1

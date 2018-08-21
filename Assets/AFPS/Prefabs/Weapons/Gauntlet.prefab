@@ -328,12 +328,15 @@ MonoBehaviour:
   projectile: 0
   projectilePrefab: {fileID: 0}
   projectileSpeed: 25
+  splashRadius: 0
+  maximumSplashDamage: 0
   beam: 0
   effectDisplayTime: 0
   impactEffect: {fileID: 198991565025949208, guid: 56513c3a639a84c42993c71a79fc89cb,
     type: 2}
   m_HitSounds:
   - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
+  - {fileID: 8300000, guid: 62b33c04e6a8b104da1eab29fcc04f52, type: 3}
 --- !u!114 &114759531748245216
 MonoBehaviour:
   m_ObjectHideFlags: 1
