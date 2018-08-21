@@ -327,10 +327,8 @@
     <Compile Include="Assets\AFPS\Scripts\testing\Spawn.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\TargetDummy.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\WeaponPickup.cs" />
-    <Compile Include="Assets\AFPS\Scripts\Weapons\Gauntlet.cs" />
-    <Compile Include="Assets\AFPS\Scripts\Weapons\HitScan.cs" />
+    <Compile Include="Assets\AFPS\Scripts\Weapons\FireWeapon.cs" />
     <Compile Include="Assets\AFPS\Scripts\Weapons\Projectile.cs" />
-    <Compile Include="Assets\AFPS\Scripts\Weapons\Rocket.cs" />
     <Compile Include="Assets\AFPS\Scripts\Weapons\WeaponSwitching.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\CameraControls.cs" />
     <Compile Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\Scripts\IcoBumpin.cs" />

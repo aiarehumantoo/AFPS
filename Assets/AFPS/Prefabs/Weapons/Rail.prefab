@@ -252,11 +252,14 @@ MonoBehaviour:
   damagePerShot: 50
   timeBetweenBullets: 1.5
   range: 100
+  projectile: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 25
   beam: 1
   effectDisplayTime: 0.1
-  m_HitSounds:
-  - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
   impactEffect: {fileID: 198000277327293096}
+  m_HitSounds:
+  - {fileID: 8300000, guid: 62b33c04e6a8b104da1eab29fcc04f52, type: 3}
 --- !u!120 &120916672380983934
 LineRenderer:
   m_ObjectHideFlags: 1

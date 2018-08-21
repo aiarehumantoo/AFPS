@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     private float playerFriction = 0.0f;
 
     #region Audio
+    [Header("Audio")]
     // An array of sounds that will be randomly selected from
     public AudioClip[] m_PlaySounds;        // Used to play sounds
     public AudioClip[] m_JumpSounds;
@@ -41,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private Inputs _inputs;
 
     #region MouseControls
-
+    [Header("Mouse")]
     //Camera
     public Transform playerView;
     public float playerViewYOffset = 0.6f; // The height at which the camera is bound to

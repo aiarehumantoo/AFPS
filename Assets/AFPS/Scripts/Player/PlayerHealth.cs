@@ -4,33 +4,31 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    // Health
+    [Header("Health")]
     public int startingHealth = 125;    // Health at spawn
     public int maxHealth = 100;         // Maximum health
     public int maxOverHeal = 200;          // Maximum overheal
     public int currentHealth;           // Current health
 
-    // Armor
+    [Header("Armor")]
     public int startingArmor = 50;
     public int maxArmor = 100;
     public int maxOverArmor = 200;      // better name?
     public int currentArmor;
     public int armorDamageReduction = 2;       // Starting with 50% reduction. Will need some tweaking
 
-    // Stack decay
-    float timer;
+    [Header("Stack decay")]
     int decayRate = 2;               // How much stacks decay each tick
     float decayTick = 2.0f;         // Delay between each tick
 
+    float timer;
     bool isDead = false;
 
     CapsuleCollider capsuleCollider;            // Reference to the capsule collider.
     Rigidbody rb;
 
     private CharacterController _controller;
-
     private Vector3 playerVelocity = Vector3.zero;
-
     public GUIStyle style;
 
 

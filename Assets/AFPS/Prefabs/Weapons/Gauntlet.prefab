@@ -74,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4220106759905876}
   - component: {fileID: 82351788836567078}
-  - component: {fileID: 114629106417731816}
   - component: {fileID: 114013559538920388}
   m_Layer: 0
   m_Name: Gauntlet
@@ -326,21 +325,15 @@ MonoBehaviour:
   damagePerShot: 14
   timeBetweenBullets: 0.055
   range: 1.5
-  m_HitSounds:
-  - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
+  projectile: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 25
+  beam: 0
+  effectDisplayTime: 0
   impactEffect: {fileID: 198991565025949208, guid: 56513c3a639a84c42993c71a79fc89cb,
     type: 2}
---- !u!114 &114629106417731816
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1989363170998128}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c3131ffc3f0cfc4bbabf48c8705ec73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_HitSounds:
+  - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
 --- !u!114 &114759531748245216
 MonoBehaviour:
   m_ObjectHideFlags: 1

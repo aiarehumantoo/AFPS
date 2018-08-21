@@ -3,34 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class HitScan : MonoBehaviour
+public class FireWeapon : MonoBehaviour
 {
-    // Hitscan code     // hitscan + projectile vs single code + type select
 
-
-
-    Transform camera;                                       //camera location for shooting
-
+    [Header("Weapon Stats")]
     public int damagePerShot = 7;                         // The damage inflicted by each bullet.              lg = 7, rail = 30
     public float timeBetweenBullets = 0.055f;              // The time between each shot. QC LG firerate       lg = 0.055f, rail = 1.5f
     public float range = 100f;                             // The distance the gun can fire.
-    public bool beam;                                   // Does this weapon use beam sfx?
-    public float effectDisplayTime;                     // For how long beam is displayed
-
     Vector3 knockback;
     float knockbackForce = 100f;
+
+    [Header("Projectile")]
+    public bool projectile;
+    public GameObject projectilePrefab;             // Prefab of the projectile
+    int spawnDistance = 2;                          // How far from the player projectile should spawn
+    public int projectileSpeed = 25;
+
+    [Header("SFX")]
+    public bool beam;                                   // Does this weapon use beam sfx?
+    public float effectDisplayTime;                     // For how long beam is displayed
+    public ParticleSystem impactEffect;
+    public AudioClip[] m_HitSounds;
+    
+
+
+    private AudioSource m_AudioSource;
+    LineRenderer beamLine;
+
+    Transform camera;                                       //camera location for shooting
 
     float timer;                                    // A timer to determine when to fire.
     Ray shootRay = new Ray();                       // A ray from the gun end forwards.
     RaycastHit shootHit;                            // A raycast hit to get information about what was hit.
     int shootableMask;                              // A layer mask so the raycast only hits things on the shootable layer.
 
-    public AudioClip[] m_HitSounds;
-    private AudioSource m_AudioSource;
 
-    public ParticleSystem impactEffect;
 
-    LineRenderer beamLine;
 
 
     // TODO NOTES
@@ -52,7 +60,7 @@ public class HitScan : MonoBehaviour
         m_AudioSource = GetComponent<AudioSource>();
 
         // Get line renderer component
-        if (beam)
+        if (beam && !projectile)
         {
             beamLine = GetComponent<LineRenderer>();
         }
@@ -69,7 +77,7 @@ public class HitScan : MonoBehaviour
         timer += Time.deltaTime;
 
         // Update beam sfx starting position
-        if(beam && Input.GetButton("Fire1"))
+        if(beam && Input.GetButton("Fire1") && !projectile)
         {
             beamLine.SetPosition(0, transform.position);
         }
@@ -78,9 +86,16 @@ public class HitScan : MonoBehaviour
         if (Input.GetButton("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
         {
             // ... shoot the gun.
-            Fire();
+            if (projectile)
+            {
+                FireProjectile();
+            }
+            else
+            {
+                FireHitScan();
+            }
         }
-        else if(timer >= effectDisplayTime) // Not firing and sfx has expired
+        else if(timer >= effectDisplayTime && !projectile) // Not firing and sfx has expired
         {
             // Disable beam sfx
             if (beam)
@@ -100,7 +115,36 @@ public class HitScan : MonoBehaviour
         }
     }
 
-    void Fire()
+    void FireProjectile()
+    {
+        // Reset the timer.
+        timer = 0f;
+
+        // Spawn point
+        Vector3 projectileSpawn = camera.position + camera.transform.forward * spawnDistance;
+
+        // Create the Bullet from the Bullet Prefab
+        //var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn.position, projectileSpawn.rotation);
+        var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn, camera.rotation);
+
+        // Add velocity to the bullet
+        projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * projectileSpeed;
+
+        // Other projectile stats
+        Projectile projectileScript = projectile.GetComponent<Projectile>();
+        projectileScript.damagePerShot = damagePerShot;
+        projectileScript.knockbackForce = knockbackForce;
+        // Link this script
+        projectileScript.parentScript = GetComponent<FireWeapon>();
+
+        // Spawn the bullet on the Clients
+        //NetworkServer.Spawn(projectile);
+
+        // Destroy the bullet after 5 seconds
+        Destroy(projectile, 5.0f);
+    }
+
+    void FireHitScan()
     {
         // Reset the timer.
         timer = 0f;
@@ -120,10 +164,8 @@ public class HitScan : MonoBehaviour
         if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
         {
             // Try and find an EnemyHealth script on the gameobject hit.
-            //EnemyHealth enemyHealth = shootHit.collider.GetComponent<EnemyHealth>();
             TargetDummy targetDummy = shootHit.collider.GetComponent<TargetDummy>();
 
-            
             if (targetDummy != null)
             {
                 knockback = transform.forward * knockbackForce;
@@ -165,7 +207,7 @@ public class HitScan : MonoBehaviour
         }
     }
 
-    private void PlayHitSounds()
+    public void PlayHitSounds()
     {
         // pick & play a random jump sound from the array,
         // excluding sound at index 0

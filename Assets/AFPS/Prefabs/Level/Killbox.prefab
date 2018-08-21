@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 64705414635277604}
   - component: {fileID: 114203501074037260}
   m_Layer: 11
-  m_Name: Cube (16)
+  m_Name: Killbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
