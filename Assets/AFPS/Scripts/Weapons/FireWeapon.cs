@@ -11,7 +11,7 @@ public class FireWeapon : MonoBehaviour
     public float timeBetweenBullets = 0.055f;              // The time between each shot. QC LG firerate       lg = 0.055f, rail = 1.5f
     public float range = 100f;                             // The distance the gun can fire.
     Vector3 knockback;
-    float knockbackForce = 100f;
+    float knockbackForce = 20f;
     public int weaponSlot = 0;
 
     [Header("Projectile")]

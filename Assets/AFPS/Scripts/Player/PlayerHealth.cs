@@ -99,8 +99,13 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= amount;
 
         // Apply knockback
-        playerVelocity += knockback * Time.deltaTime;
-        _controller.Move(playerVelocity * Time.deltaTime);
+        //playerVelocity += knockback * Time.deltaTime;
+        //_controller.Move(playerVelocity * Time.deltaTime);
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.KnockBack(knockback);    // Doing knockback in movement code
+        }
 
         // If the current health is less than or equal to zero...
         if (currentHealth <= 0)

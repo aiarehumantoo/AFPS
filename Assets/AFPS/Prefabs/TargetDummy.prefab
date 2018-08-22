@@ -25,7 +25,6 @@ GameObject:
   - component: {fileID: 114064909713353092}
   - component: {fileID: 114759856858682926}
   - component: {fileID: 54188966257213984}
-  - component: {fileID: 143290723881187492}
   m_Layer: 10
   m_Name: TargetDummy
   m_TagString: Untagged
@@ -138,21 +137,4 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!143 &143290723881187492
-CharacterController:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1643565418499060}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Height: 1.8
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}

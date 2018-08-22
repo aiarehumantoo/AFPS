@@ -304,6 +304,7 @@
     <Compile Include="Assets\AFPS\Scripts\Crosshair.cs" />
     <Compile Include="Assets\AFPS\Scripts\ItemPickup.cs" />
     <Compile Include="Assets\AFPS\Scripts\Level\DamageBox.cs" />
+    <Compile Include="Assets\AFPS\Scripts\Level\JumpPad.cs" />
     <Compile Include="Assets\AFPS\Scripts\Level\KillBox.cs" />
     <Compile Include="Assets\AFPS\Scripts\Level\Slipgate.cs" />
     <Compile Include="Assets\AFPS\Scripts\Misc\Debugger.cs" />

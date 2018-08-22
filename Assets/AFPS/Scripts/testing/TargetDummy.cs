@@ -12,18 +12,11 @@ public class TargetDummy : MonoBehaviour
     CapsuleCollider capsuleCollider;            // Reference to the capsule collider.
     Rigidbody rb;
 
-    private CharacterController _controller;
-
-    private Vector3 playerVelocity = Vector3.zero;
-
-
     void Awake()
     {
         // Setting up the references.
         capsuleCollider = GetComponent<CapsuleCollider>();
-
         rb = GetComponent<Rigidbody>();
-        _controller = GetComponent<CharacterController>();
 
         // Setting the current health when the enemy first spawns.
         currentHealth = startingHealth;
@@ -45,8 +38,6 @@ public class TargetDummy : MonoBehaviour
 
         // Apply knockback
         rb.AddForce(knockback);     // works for test dummy, but players are kinematic. Needs other way to apply knockback force
-        //playerVelocity += knockback * Time.deltaTime;
-        //_controller.Move(playerVelocity * Time.deltaTime);
 
         // If the current health is less than or equal to zero...
         if (currentHealth <= 0)
@@ -56,7 +47,6 @@ public class TargetDummy : MonoBehaviour
             Death();
         }
     }
-
 
     void Death()
     {

@@ -207,7 +207,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1086164869176778}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.700958, y: 1, z: -5.042225}
+  m_LocalPosition: {x: 3.3531952, y: 1, z: 16.65395}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224560667125052584}
@@ -671,7 +671,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damagePerShot: 14
   timeBetweenBullets: 0.055
-  range: 1.5
+  range: 2
   weaponSlot: 0
   projectile: 0
   projectilePrefab: {fileID: 0}
