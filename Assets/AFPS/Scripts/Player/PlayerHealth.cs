@@ -25,11 +25,13 @@ public class PlayerHealth : MonoBehaviour
     bool isDead = false;
 
     CapsuleCollider capsuleCollider;            // Reference to the capsule collider.
-    Rigidbody rb;
+    public GUIStyle style;
 
+    // pointless?
+    Rigidbody rb;
     private CharacterController _controller;
     private Vector3 playerVelocity = Vector3.zero;
-    public GUIStyle style;
+    
 
 
 
@@ -53,7 +55,6 @@ public class PlayerHealth : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
 
         rb = GetComponent<Rigidbody>();
-
         _controller = GetComponent<CharacterController>();
 
         // Health at spawn

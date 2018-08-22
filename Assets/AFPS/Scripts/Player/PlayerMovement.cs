@@ -189,7 +189,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void KnockBack(Vector3 knockback)
     {
-        // Set movement to vector knockback + vector input      (cant just set movement in health code since two codes for movement does not work properly)
+        // Apply knockback
         playerVelocity = knockback;
     }
 
