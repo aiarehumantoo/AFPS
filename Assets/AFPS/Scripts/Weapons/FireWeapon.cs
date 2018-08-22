@@ -125,7 +125,7 @@ public class FireWeapon : MonoBehaviour
         timer = 0f;
 
         // Spawn point
-        Vector3 projectileSpawn = camera.position + camera.transform.forward * spawnDistance;
+        Vector3 projectileSpawn = camera.position + camera.transform.forward.normalized * spawnDistance;
 
         // Create the Bullet from the Bullet Prefab
         //var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn.position, projectileSpawn.rotation);
@@ -172,7 +172,11 @@ public class FireWeapon : MonoBehaviour
 
             if (targetDummy != null)
             {
-                knockback = transform.forward * knockbackForce;
+                // Knockback calculated using position of the weapon, use camera location instead to get correct vector?
+                //knockback = transform.forward.normalized * knockbackForce;                                                    // Knockback direction (normalized) * force
+                //knockback = (shootHit.transform.position - transform.position).normalized * knockbackForce;                   // Same as before
+
+                knockback = camera.transform.forward.normalized * knockbackForce;
 
                 // ... the enemy should take damage.
                 targetDummy.TakeDamage(damagePerShot, knockback);
@@ -190,10 +194,10 @@ public class FireWeapon : MonoBehaviour
             }
 
             // If the Health component exist...
-            PlayerHealth playerHealth = shootHit.collider.GetComponent<PlayerHealth>();             //CLEAN UP LATER
+            PlayerHealth playerHealth = shootHit.collider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                knockback = transform.forward * knockbackForce;
+                knockback = camera.transform.forward.normalized * knockbackForce;
 
                 // ... the enemy should take damage.
                 playerHealth.TakeDamage(damagePerShot, knockback);
@@ -201,6 +205,7 @@ public class FireWeapon : MonoBehaviour
                 // Hp drops to 0 after taking damage
                 if (playerHealth.currentHealth <= 0)
                 {
+                    // Last hit
                     PlayHitSounds(true);
                 }
                 else

@@ -109,7 +109,7 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 492}
   m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
-  controlID: 38
+  controlID: 9
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 39
+  controlID: 10
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 221}
   m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
-  controlID: 40
+  controlID: 11
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -398,9 +398,9 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 28070000
+    m_SelectedIDs: 162b0000
     m_LastClickedID: 0
-    m_ExpandedIDs: 9efbffff00000000
+    m_ExpandedIDs: 9efbffff00000000482d0000122f0000762f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -456,9 +456,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 3.4867344, y: -7.6171875, z: -3.736847}
+    m_Target: {x: 8.983615, y: -16.544216, z: 33.865784}
     speed: 2
-    m_Value: {x: 3.4867344, y: -7.6171875, z: -3.736847}
+    m_Value: {x: 8.983615, y: -16.544216, z: 33.865784}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -482,9 +482,9 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.10942763, y: -0.89048404, z: 0.31935254, w: -0.30508658}
+    m_Target: {x: -0.40975443, y: 0.025246635, z: -0.011360884, w: -0.9117756}
     speed: 2
-    m_Value: {x: -0.10942763, y: -0.89048404, z: 0.31935254, w: -0.30508658}
+    m_Value: {x: -0.40975446, y: 0.025246637, z: -0.011360885, w: -0.91177565}
   m_Size:
     m_Target: 34.16533
     speed: 2
@@ -566,18 +566,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/AFPS
+    - Assets/AFPS/Prefabs/Weapons
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/AFPS
+  - Assets/AFPS/Prefabs/Weapons
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Program Files\Unity projects\AFPS
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 73}
-    m_SelectedIDs: 40290000
-    m_LastClickedID: 10560
+    m_SelectedIDs: 3e2c0000
+    m_LastClickedID: 11326
     m_ExpandedIDs: 00000000a2280000c6280000c82800004029000088290000622b0000da2b00003e2c0000f8310000fa310000fc310000fe31000000320000023200000432000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0

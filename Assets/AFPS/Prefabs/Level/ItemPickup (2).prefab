@@ -124,4 +124,4 @@ MonoBehaviour:
   itemType: 0
   amount: 100
   overheal: 1
-  cooldown: 60
+  cooldown: 30

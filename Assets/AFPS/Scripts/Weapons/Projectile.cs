@@ -32,9 +32,9 @@ public class Projectile : MonoBehaviour
         var hit = other.gameObject;
 
         // Calculate knockback
-        knockback = (transform.position - other.transform.position) * knockbackForce;
+        knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force
 
-        // Deal damage                                                                          // Clean up + knockback based on where projectile hits
+        // Deal damage
         TargetDummy targetDummy = hit.GetComponent<TargetDummy>();
         if (targetDummy != null)
         {
