@@ -191,6 +191,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Apply knockback
         playerVelocity = knockback;
+        //playerVelocity += knockback;
     }
 
     private void SetMovementDir()

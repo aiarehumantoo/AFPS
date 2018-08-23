@@ -5,11 +5,14 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public int damagePerShot;
+    public int splashDamage;
 
     Vector3 knockback;
     public float knockbackForce;
 
     public FireWeapon parentScript;
+
+    public GameObject explosionPrefab;
 
 
 
@@ -21,6 +24,8 @@ public class Projectile : MonoBehaviour
      * 
      * Splash damage & sfx
      * 
+     * 
+     * Hit detection is bit lacking. sometimes explosion spawns inside a wall
      *
      * 
      */
@@ -29,46 +34,71 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        var hit = other.gameObject;
-
-        // Calculate knockback
-        knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force
-
-        // Deal damage
-        TargetDummy targetDummy = hit.GetComponent<TargetDummy>();
-        if (targetDummy != null)
+        // Direct hit
+        if (other.tag == "Player")
         {
-            // ... the enemy should take damage.
-            targetDummy.TakeDamage(damagePerShot, knockback);
+            // Calculate knockback (direct hit)                           // splash damage knockback = vector between origin and target (normalized)? (or without normalizing knockback will vary depending on distance. needs to be reversed tho for knockback to be stronger the closer it hits.
+            knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force                                            
 
-            // Hp drops to 0 after taking damage
-            if (targetDummy.currentHealth <= 0)
+            // Deal damage
+            TargetDummy targetDummy = other.gameObject.GetComponent<TargetDummy>();
+            if (targetDummy != null)
             {
-                parentScript.PlayHitSounds(true);
+                // ... the enemy should take damage.
+                targetDummy.TakeDamage(damagePerShot, knockback);
+
+                // Hp drops to 0 after taking damage
+                if (targetDummy.currentHealth <= 0)
+                {
+                    parentScript.PlayHitSounds(true);
+                }
+                else
+                {
+                    parentScript.PlayHitSounds(false);
+                }
             }
-            else
+            PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
             {
-                parentScript.PlayHitSounds(false);
+                // ... the enemy should take damage.
+                playerHealth.TakeDamage(damagePerShot, knockback);
+
+                // Hp drops to 0 after taking damage
+                if (playerHealth.currentHealth <= 0)
+                {
+                    parentScript.PlayHitSounds(true);
+                }
+                else
+                {
+                    parentScript.PlayHitSounds(false);
+                }
+
             }
         }
-        PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
+
+        // Hits terrain                                                                                                             // NO SPLASH DAMAGE ON DIRECT HITS
+        if(other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
-            // ... the enemy should take damage.
-            playerHealth.TakeDamage(damagePerShot, knockback);
+            // Spawn explosion
+            var explosion = (GameObject)Instantiate(explosionPrefab, transform.position, transform.rotation);
 
-            // Hp drops to 0 after taking damage
-            if (playerHealth.currentHealth <= 0)
-            {
-                parentScript.PlayHitSounds(true);
-            }
-            else
-            {
-                parentScript.PlayHitSounds(false);
-            }
+            // Explosion stats
+            ProjectileExplosion explosionScript = explosion.GetComponent<ProjectileExplosion>();
+            //explosionScript.damagePerShot = damagePerShot;
+            explosionScript.splashDamage = splashDamage;
+            explosionScript.knockbackForce = knockbackForce;
 
+            // Link parent script
+            explosionScript.parentScript = parentScript;
+
+            // Spawn the explosion on the Clients
+            //NetworkServer.Spawn(projectile);
+
+            // Destroy the explosion after x seconds
+            Destroy(explosion, 0.5f);
         }
 
+        // Destroy projectile
         Destroy(gameObject);
     }
 }

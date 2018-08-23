@@ -37,7 +37,7 @@ public class TargetDummy : MonoBehaviour
         currentHealth -= amount;
 
         // Apply knockback
-        rb.AddForce(knockback);     // works for test dummy, but players are kinematic. Needs other way to apply knockback force
+        rb.AddForce(knockback * 10);     // works for test dummy, but players are kinematic. Needs other way to apply knockback force
 
         // If the current health is less than or equal to zero...
         if (currentHealth <= 0)

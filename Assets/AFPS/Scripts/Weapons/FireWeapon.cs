@@ -19,8 +19,8 @@ public class FireWeapon : MonoBehaviour
     public GameObject projectilePrefab;             // Prefab of the projectile
     int spawnDistance = 2;                          // How far from the player projectile should spawn
     public int projectileSpeed = 25;
-    public float splashRadius;
-    public float maximumSplashDamage;
+    public float splashRadius;                                                                                                      // Currently using prefab size for explosion / splash size
+    public int maximumSplashDamage;
     float projectileLifeTime = 2.0f;                // For deleting projectiles that hit nothing
 
     [Header("SFX")]
@@ -127,21 +127,23 @@ public class FireWeapon : MonoBehaviour
         // Spawn point
         Vector3 projectileSpawn = camera.position + camera.transform.forward.normalized * spawnDistance;
 
-        // Create the Bullet from the Bullet Prefab
+        // Create the projectile from the Prefab
         //var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn.position, projectileSpawn.rotation);
         var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn, camera.rotation);
 
-        // Add velocity to the bullet
+        // Add velocity to the projectile
         projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * projectileSpeed;
 
         // Other projectile stats
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.damagePerShot = damagePerShot;
         projectileScript.knockbackForce = knockbackForce;
+        projectileScript.splashDamage = maximumSplashDamage;
+
         // Link this script
         projectileScript.parentScript = GetComponent<FireWeapon>();
 
-        // Spawn the bullet on the Clients
+        // Spawn the projectile on the Clients
         //NetworkServer.Spawn(projectile);
 
         // Destroy the bullet after x seconds

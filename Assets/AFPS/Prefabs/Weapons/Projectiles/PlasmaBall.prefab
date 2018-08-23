@@ -112,8 +112,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damagePerShot: 0
+  splashDamage: 0
   knockbackForce: 0
   parentScript: {fileID: 0}
+  explosionPrefab: {fileID: 1383920425584266, guid: cfc782fb2f43e3f47adccd3405dfe4ff,
+    type: 2}
 --- !u!135 &135503305724631490
 SphereCollider:
   m_ObjectHideFlags: 1
