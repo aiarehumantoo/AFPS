@@ -10,6 +10,7 @@ public class ProjectileExplosion : MonoBehaviour
     public float knockbackForce;
 
     public FireWeapon parentScript;
+    public GameObject parentGameObject;
 
     void OnTriggerEnter(Collider other)
     {
@@ -17,7 +18,7 @@ public class ProjectileExplosion : MonoBehaviour
         if (other.tag == "Player")
         {
             // Calculate knockback
-            knockback = (other.transform.position - transform.position) * knockbackForce;           // Reduce knockback if further away?
+            knockback = (other.transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
             
             // Calculate splash damage
             //splashDamage =
@@ -46,14 +47,17 @@ public class ProjectileExplosion : MonoBehaviour
                 //playerHealth.TakeDamage(splashDamage, knockback);
                 playerHealth.TakeDamage(0, knockback);                                      // 0 damage to players, for testing rocket jumps
 
-                // Hp drops to 0 after taking damage
-                if (playerHealth.currentHealth <= 0)
+                if (parentGameObject != other.transform.gameObject) // No hitsounds if self damage
                 {
-                    parentScript.PlayHitSounds(true);
-                }
-                else
-                {
-                    parentScript.PlayHitSounds(false);
+                    // Hp drops to 0 after taking damage
+                    if (playerHealth.currentHealth <= 0)
+                    {
+                        parentScript.PlayHitSounds(true);
+                    }
+                    else
+                    {
+                        parentScript.PlayHitSounds(false);
+                    }
                 }
 
             }

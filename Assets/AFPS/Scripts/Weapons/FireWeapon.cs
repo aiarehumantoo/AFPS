@@ -17,7 +17,7 @@ public class FireWeapon : MonoBehaviour
     [Header("Projectile")]
     public bool projectile;
     public GameObject projectilePrefab;             // Prefab of the projectile
-    int spawnDistance = 2;                          // How far from the player projectile should spawn
+    float spawnDistance = 0.0f;                          // How far from the player projectile should spawn                         // Spawn distance is pointless with projectiles igonring the shooter. Might be needed for better visuals?
     public int projectileSpeed = 25;
     public float splashRadius;                                                                                                      // Currently using prefab size for explosion / splash size
     public int maximumSplashDamage;
@@ -142,6 +142,8 @@ public class FireWeapon : MonoBehaviour
 
         // Link this script
         projectileScript.parentScript = GetComponent<FireWeapon>();
+        // Link player gameobject
+        projectileScript.parentGameObject = transform.root.gameObject;
 
         // Spawn the projectile on the Clients
         //NetworkServer.Spawn(projectile);
@@ -169,6 +171,13 @@ public class FireWeapon : MonoBehaviour
         // Perform the raycast against gameobjects on the shootable layer and if it hits something...
         if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
         {
+            // Workaround for self hits. problem atleast with jumppads                                                              //<-- FIX. allow raycast to hit multiple targets + ignore shooter? + boolean for toggling multi target since only railgun hits mutiple targets
+            if (transform.root.gameObject == shootHit.transform.gameObject)                                                         // Set layer locally? Start as enemy, change into player and then this new layer is ignored? should work as long as change isnt updated for other clients
+            {                                                                                                                                   // or just set starting point just outside of the players collider
+                return;
+            }
+            //
+
             // Try and find an Health script on the gameobject hit.
             TargetDummy targetDummy = shootHit.collider.GetComponent<TargetDummy>();
 

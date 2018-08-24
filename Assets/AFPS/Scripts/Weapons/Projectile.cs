@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour
     public float knockbackForce;
 
     public FireWeapon parentScript;
+    public GameObject parentGameObject;
 
     public GameObject explosionPrefab;
 
@@ -37,6 +38,12 @@ public class Projectile : MonoBehaviour
         // Direct hit
         if (other.tag == "Player")
         {
+            // Ignore player that shot the projectile
+            if(parentGameObject == other.gameObject)
+            {
+                return;
+            }
+
             // Calculate knockback (direct hit)                           // splash damage knockback = vector between origin and target (normalized)? (or without normalizing knockback will vary depending on distance. needs to be reversed tho for knockback to be stronger the closer it hits.
             knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force                                            
 
@@ -90,12 +97,14 @@ public class Projectile : MonoBehaviour
 
             // Link parent script
             explosionScript.parentScript = parentScript;
+            // Link player gameobject
+            explosionScript.parentGameObject = parentGameObject;
 
             // Spawn the explosion on the Clients
             //NetworkServer.Spawn(projectile);
 
             // Destroy the explosion after x seconds
-            Destroy(explosion, 0.5f);
+            Destroy(explosion, 0.25f);
         }
 
         // Destroy projectile

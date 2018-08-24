@@ -115,6 +115,7 @@ MonoBehaviour:
   splashDamage: 0
   knockbackForce: 0
   parentScript: {fileID: 0}
+  parentGameObject: {fileID: 0}
   explosionPrefab: {fileID: 1555562737534394, guid: 8034b0f993881274da52611c551dd72b,
     type: 2}
 --- !u!135 &135384008976564392
