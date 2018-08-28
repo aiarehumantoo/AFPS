@@ -190,8 +190,8 @@ public class PlayerMovement : MonoBehaviour
     public void KnockBack(Vector3 knockback)
     {
         // Apply knockback
-        playerVelocity = knockback;
-        //playerVelocity += knockback;
+        //playerVelocity = knockback;
+        playerVelocity += knockback;
     }
 
     private void SetMovementDir()
