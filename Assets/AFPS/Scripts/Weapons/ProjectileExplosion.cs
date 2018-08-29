@@ -12,7 +12,8 @@ public class ProjectileExplosion : MonoBehaviour
     public FireWeapon parentScript;
     public GameObject parentGameObject;
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)             // Applied on first hit. calculate knockback based on distance to center of explosion.       !!Can bug out in certain situations if player is already inside the trigger and thus never enters it. maybe timestep issue, object disappears before next cycle?!!
+    //void OnTriggerStay(Collider other)          // knockback applied on every timestep as long as player is within radius, no need to calculate distance based force. Remember to apply damage just once.
     {
         // Explosion hits player
         if (other.tag == "Player")
