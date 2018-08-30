@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1944165083075518}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18, y: 1.05, z: -11}
+  m_LocalPosition: {x: 18, y: 1.05, z: 16}
   m_LocalScale: {x: 2, y: 0.1, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 1743055108589450, guid: fa8dec917b1b6864d9588a82063f337a, type: 2}
+  weaponName: Rail
   pickup: {fileID: 1406570999128696, guid: d34af1c0eef02144ea2cf03e776903be, type: 2}
   weaponSlot: 4
   cooldown: 5

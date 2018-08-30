@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000289749521412}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18, y: 1.05, z: -8}
+  m_LocalPosition: {x: 18, y: 1.05, z: 19}
   m_LocalScale: {x: 2, y: 0.099999994, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 1352822491517602, guid: 5cc9f855fa905a34aa19720445b9d7f6, type: 2}
+  weaponName: RL
   pickup: {fileID: 1654552870871372, guid: 7d28a20df8cccae45865d597d1d9404c, type: 2}
   weaponSlot: 3
   cooldown: 5

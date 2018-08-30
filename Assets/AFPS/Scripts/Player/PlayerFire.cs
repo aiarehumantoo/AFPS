@@ -7,10 +7,10 @@ public class PlayerFire : NetworkBehaviour
 {
     // Weapons
     bool gauntlet = true;
-    bool plasma = true;
-    bool lg = true;
-    bool rail = true;
-    bool rl = true;
+    bool plasma;
+    bool lg;
+    bool rail;
+    bool rl;
 
     // Stats
     int damagePerShot;                         // The damage inflicted by each shot.                        lg = 7, rail = 30, plasma = 20, rl = 100
@@ -318,6 +318,26 @@ public class PlayerFire : NetworkBehaviour
         impactEffect.Play();
     }
     */
+
+    public void GiveWeapon(string weaponName)
+    {
+        if(weaponName == "Plasma")
+        {
+            plasma = true;
+        }
+        if (weaponName == "LG")
+        {
+            lg = true;
+        }
+        if(weaponName == "RL")
+        {
+            rl = true;
+        }
+        if(weaponName == "Rail")
+        {
+            rail = true;
+        }
+    }
 
     void HitDummy()
     {

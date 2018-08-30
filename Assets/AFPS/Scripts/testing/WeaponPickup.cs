@@ -5,7 +5,8 @@ using UnityEngine.Networking;   // Networking namespace
 
 public class WeaponPickup : NetworkBehaviour
 {
-    public GameObject weapon;        //weapon prefab
+    public GameObject weapon;        //weapon prefab            // not spawning weapons anymore
+    public string weaponName;
     public GameObject pickup;        //pickup prefab
     public int weaponSlot;          //slot the weapon belongs to. 0 = gauntlet, 1 = lg, 2 = rl, 3 = rail
 
@@ -50,6 +51,14 @@ public class WeaponPickup : NetworkBehaviour
             // Hide pickup item during cooldown
             pickupAnim.SetActive(false);
 
+            // Enable weapon
+            PlayerFire playerFire = other.GetComponent<PlayerFire>();
+            if(playerFire != null)
+            {
+                playerFire.GiveWeapon(weaponName);
+            }
+
+            /*
             // Search player/camera/weapons and give weapon if player doenst have one yet
             if (!other.transform.GetChild(0).GetChild(0).transform.Find(weapon.name + "(Clone)"))
             {
@@ -67,6 +76,7 @@ public class WeaponPickup : NetworkBehaviour
             {
                 //give ammo
             }
+            */
         }
     }
 }
