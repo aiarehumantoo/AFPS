@@ -310,6 +310,7 @@
     <Compile Include="Assets\AFPS\Scripts\Misc\Debugger.cs" />
     <Compile Include="Assets\AFPS\Scripts\Misc\Settings.cs" />
     <Compile Include="Assets\AFPS\Scripts\Player\InputAI.cs" />
+    <Compile Include="Assets\AFPS\Scripts\Player\PlayerFire.cs" />
     <Compile Include="Assets\AFPS\Scripts\Player\PlayerHealth.cs" />
     <Compile Include="Assets\AFPS\Scripts\Player\PlayerMovement.cs" />
     <Compile Include="Assets\AFPS\Scripts\Player\Respawn.cs" />
@@ -321,6 +322,7 @@
     <Compile Include="Assets\AFPS\Scripts\testing\LaserTest2.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\lg.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\LineTest.cs" />
+    <Compile Include="Assets\AFPS\Scripts\testing\NetworkShoot.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\PickupAnim.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\rail.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\Rotate.cs" />

@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;   // Networking namespace
 
 
-public class FireWeapon : MonoBehaviour
+// old --> PlayerFire.cs
+
+
+public class FireWeapon : NetworkBehaviour
 {
 
     [Header("Weapon Stats")]
@@ -25,7 +29,7 @@ public class FireWeapon : MonoBehaviour
 
     [Header("SFX")]
     public bool beam;                                   // Does this weapon use beam sfx?
-    public float effectDisplayTime;                     // For how long beam is displayed
+    public float effectDisplayTime = 0.1f;                     // For how long beam is displayed
     public ParticleSystem impactEffect;
     public AudioClip[] m_HitSounds;
     
@@ -55,7 +59,8 @@ public class FireWeapon : MonoBehaviour
      */
 
 
-    void Awake()
+    //void Awake()
+    void Start()
     {
         // Create a layer mask for the Shootable layer.
         shootableMask = LayerMask.GetMask("Enemy", "Environment");
@@ -86,17 +91,19 @@ public class FireWeapon : MonoBehaviour
             beamLine.SetPosition(0, transform.position);
         }
 
-        // If the Fire1 button is being press and it's time to fire...
+        // If the Fire1 button is being pressed and it's time to fire...
         if (Input.GetButton("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
         {
             // ... shoot the gun.
             if (projectile)
             {
-                FireProjectile();
+                CmdFireProjectile();
+                //FireProjectile();
             }
             else
             {
-                FireHitScan();
+                CmdFireHitScan();
+                //FireHitScan();
             }
         }
         else if(timer >= effectDisplayTime && !projectile) // Not firing and sfx has expired
@@ -108,6 +115,7 @@ public class FireWeapon : MonoBehaviour
             }
         }
 
+        /*
         // DEBUG. Draw line from barrel to target. ENABLE GIZMOS IN GAME VIEW
         if (Input.GetButton("Fire1"))
         {
@@ -117,9 +125,15 @@ public class FireWeapon : MonoBehaviour
         {
             //Debug.DrawRay(transform.position, shootHit.point - transform.position, Color.red);
         }
+        */
     }
 
-    void FireProjectile()
+    //void FireProjectile()
+
+    // This [Command] code is called on the Client …
+    // … but it is run on the Server!
+    //[Command]
+    void CmdFireProjectile()
     {
         // Reset the timer.
         timer = 0f;
@@ -128,7 +142,6 @@ public class FireWeapon : MonoBehaviour
         Vector3 projectileSpawn = camera.position + camera.transform.forward.normalized * spawnDistance;
 
         // Create the projectile from the Prefab
-        //var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn.position, projectileSpawn.rotation);
         var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn, camera.rotation);
 
         // Add velocity to the projectile
@@ -141,18 +154,21 @@ public class FireWeapon : MonoBehaviour
         projectileScript.splashDamage = maximumSplashDamage;
 
         // Link this script
-        projectileScript.parentScript = GetComponent<FireWeapon>();
+        //projectileScript.parentScript = GetComponent<FireWeapon>();
         // Link player gameobject
         projectileScript.parentGameObject = transform.root.gameObject;
 
         // Spawn the projectile on the Clients
-        //NetworkServer.Spawn(projectile);
+        NetworkServer.Spawn(projectile);
 
         // Destroy the bullet after x seconds
         Destroy(projectile, projectileLifeTime);
     }
 
-    void FireHitScan()
+    //void FireHitScan()
+
+    //[Command]
+    void CmdFireHitScan()
     {
         // Reset the timer.
         timer = 0f;
@@ -174,7 +190,7 @@ public class FireWeapon : MonoBehaviour
             // Workaround for self hits. problem atleast with jumppads                                                              //<-- FIX. allow raycast to hit multiple targets + ignore shooter? + boolean for toggling multi target since only railgun hits mutiple targets
             if (transform.root.gameObject == shootHit.transform.gameObject)                                                         // Set layer locally? Start as enemy, change into player and then this new layer is ignored? should work as long as change isnt updated for other clients
             {                                                                                                                                   // or just set starting point just outside of the players collider
-                return;
+                //return;
             }
             //
 

@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;   // Networking namespace
 
 
-public class TargetDummy : MonoBehaviour
+public class TargetDummy : NetworkBehaviour
 {
     public int startingHealth = 100;            // The amount of health the enemy starts the game with.
+
+    [SyncVar]
     public int currentHealth;                   // The current health the enemy has.
     bool isDead = false;
 
@@ -26,12 +29,20 @@ public class TargetDummy : MonoBehaviour
     //public void TakeDamage(int amount, Vector3 hitPoint)
     public void TakeDamage(int amount, Vector3 knockback)
     {
+        // Damage only applied on the server
+        if (!isServer)
+        {
+            return;
+        }
+
+        /*
         // If the enemy is dead...
         if (isDead)
         {
             // ... no need to take damage so exit the function.
             return;
         }
+        */
 
         // Reduce the current health by the amount of damage sustained.
         currentHealth -= amount;

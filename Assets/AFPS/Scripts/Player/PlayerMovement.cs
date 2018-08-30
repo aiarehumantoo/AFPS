@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;   // Networking namespace
 
 // Original Quake 3 port;
 // https://github.com/Zinglish/quake3-movement-unity3d/blob/master/CPMPlayer.js
@@ -15,7 +16,7 @@ struct Inputs
     public float upMove;
 }
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     float gravity = 20.0f;      // Gravity
     float friction = 6;         // Ground friction
@@ -91,6 +92,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        // Enable camera / audio listener. This way these are active only on local player
+        playerView.gameObject.SetActive(true);
+
         // Hide the cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -106,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
         #region MouseControls
 
         /* Ensure that the cursor is locked into the screen */

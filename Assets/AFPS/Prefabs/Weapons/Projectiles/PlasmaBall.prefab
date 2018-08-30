@@ -24,6 +24,8 @@ GameObject:
   - component: {fileID: 23720901365712624}
   - component: {fileID: 54964540907609528}
   - component: {fileID: 114674238957027664}
+  - component: {fileID: 114050698883015064}
+  - component: {fileID: 114275306594044098}
   m_Layer: 0
   m_Name: PlasmaBall
   m_TagString: Untagged
@@ -100,6 +102,59 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114050698883015064
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1545942380009992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 217
+    i1: 202
+    i2: 75
+    i3: 104
+    i4: 106
+    i5: 165
+    i6: 60
+    i7: 20
+    i8: 90
+    i9: 211
+    i10: 17
+    i11: 137
+    i12: 102
+    i13: 227
+    i14: 248
+    i15: 217
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114275306594044098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1545942380009992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114674238957027664
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -115,6 +170,7 @@ MonoBehaviour:
   splashDamage: 0
   knockbackForce: 0
   parentScript: {fileID: 0}
+  parentGameObject: {fileID: 0}
   explosionPrefab: {fileID: 1383920425584266, guid: cfc782fb2f43e3f47adccd3405dfe4ff,
     type: 2}
 --- !u!135 &135503305724631490

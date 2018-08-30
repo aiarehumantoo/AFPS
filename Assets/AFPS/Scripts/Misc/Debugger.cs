@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;   // Networking namespace
 
-public class Debugger : MonoBehaviour
+public class Debugger : NetworkBehaviour
 {
     private CharacterController _controller;
 
@@ -16,18 +17,23 @@ public class Debugger : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(0, 60, 400, 100), "Touching: " + touching, style);
-        GUI.Label(new Rect(0, 80, 400, 100), "OnGround: " + _controller.isGrounded, style);
+        if(!isLocalPlayer)
+        {
+            return;
+        }
+
+        GUI.Label(new Rect(10, 120, 400, 100), "Touching: " + touching, style);
+        GUI.Label(new Rect(10, 140, 400, 100), "OnGround: " + _controller.isGrounded, style);
 
         var ups = _controller.velocity;
         ups.y = 0;
-        GUI.Label(new Rect(0, 100, 400, 100), "Speed: " + Mathf.Round(ups.magnitude * 100) / 100 + "ups", style);
+        GUI.Label(new Rect(10, 160, 400, 100), "Speed: " + Mathf.Round(ups.magnitude * 100) / 100 + "ups", style);
         
         var ups2 = _controller.velocity;
         //ups2.x = 0;
         //ups2.z = 0;
         //GUI.Label(new Rect(0, 120, 400, 100), "Vertical Speed: " + Mathf.Round(ups2.magnitude * 100) / 100 + "ups", style);
-        GUI.Label(new Rect(0, 120, 400, 100), "Vertical Speed: " + ups2.y + "ups", style);
+        GUI.Label(new Rect(10, 180, 400, 100), "Vertical Speed: " + ups2.y + "ups", style);
     }
 
     void OnTriggerEnter(Collider collider)

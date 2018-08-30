@@ -1,22 +1,60 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;   // Networking namespace
 
-public class SelectWeapon : MonoBehaviour
+
+
+// old --> PlayerFire.cs
+
+
+public class SelectWeapon : NetworkBehaviour
 {
     //int selectedWeapon = 0;
     string currentWeapon = "Gauntlet";
     string clone = "(Clone)";
 
-	// Use this for initialization
-	void Start ()
+    public GameObject startingWeapon;
+
+    string weaponString;
+
+    void Start()
     {
-		
-	}
+        StartingWeapon();
+    }
+
+    void StartingWeapon()
+    {
+        // Give starting weapon (gauntlet)
+        GameObject GO = Instantiate(startingWeapon);
+        GO.transform.parent = this.transform;
+        GO.transform.position = GO.transform.parent.position;
+        GO.transform.rotation = GO.transform.parent.rotation;
+
+        CmdStartingWeapon();
+    }
+
+    [Command]
+    void CmdStartingWeapon()
+    {
+        // Spawn on the Clients
+        NetworkServer.Spawn(startingWeapon);
+        //NetworkServer.Spawn(GO);
+    }
+
+    void OnPlayerConnected(NetworkPlayer player)
+    {
+        //NetworkServer.Spawn(startingWeapon);
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if(!isLocalPlayer)
+        {
+            //return;
+        }
+
         // Active weapon
         FireWeapon fireWeapon = this.transform.Find(currentWeapon +clone).GetComponent<FireWeapon>();
 
@@ -27,28 +65,35 @@ public class SelectWeapon : MonoBehaviour
 
         if (Input.GetButton("Gauntlet"))
         {
-            ChangeWeapon("Gauntlet");  
+            //ChangeWeapon("Gauntlet");
+            weaponString = "Gauntlet";
         }
 
         if (Input.GetButton("Plasma"))
         {
-            ChangeWeapon("Plasma");
+            //ChangeWeapon("Plasma");
+            weaponString = "Plasma";
         }
 
         if (Input.GetButton("RL"))
         {
-            ChangeWeapon("RocketLauncher");
+            //ChangeWeapon("RocketLauncher");
+            weaponString = "RocketLauncher";
         }
 
         if (Input.GetButton("LG"))
         {
-            ChangeWeapon("LG");
+            //ChangeWeapon("LG");
+            weaponString = "LG";
         }
 
         if (Input.GetButton("Rail"))
         {
-            ChangeWeapon("Rail");
+            //ChangeWeapon("Rail");
+            weaponString = "Rail";
         }
+
+        ChangeWeapon(weaponString);
     }
 
     void ChangeWeapon(string weapon)
@@ -68,6 +113,22 @@ public class SelectWeapon : MonoBehaviour
         currentWeapon = weapon;
 
         // Enable selected weapon
-        this.transform.Find(weapon + clone).gameObject.SetActive(true);
+        transform.Find(weapon + clone).gameObject.SetActive(true);
+
+    }
+
+    public void Respawn()
+    {
+        // Respawn with only gauntlet
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            // Destroy if not starting weapon
+            if (transform.GetChild(i).gameObject.name != startingWeapon.name + clone)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+        }
+        // Select starting weapon
+        ChangeWeapon("Gauntlet");
     }
 }

@@ -9,7 +9,7 @@ public class EnemyKilled : MonoBehaviour
     void OnDestroy()
     {
         //print("Script was destroyed");
-        GameObject spawner = GameObject.Find("Spawn_Enemy");
-        spawner.GetComponent<EnemySpawner>().SpawnEnemy();
+        //GameObject spawner = GameObject.Find("Spawn_Enemy");
+        //spawner.GetComponent<EnemySpawner>().SpawnEnemy();
     }
 }

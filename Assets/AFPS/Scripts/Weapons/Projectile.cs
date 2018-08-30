@@ -10,7 +10,8 @@ public class Projectile : MonoBehaviour
     Vector3 knockback;
     public float knockbackForce;
 
-    public FireWeapon parentScript;
+    //public FireWeapon parentScript;
+    public PlayerFire parentScript;
     public GameObject parentGameObject;
 
     public GameObject explosionPrefab;
@@ -100,7 +101,7 @@ public class Projectile : MonoBehaviour
             // Link player gameobject
             explosionScript.parentGameObject = parentGameObject;
 
-            // Spawn the explosion on the Clients
+            // Spawn the explosion on the Clients                                       // No need to do this since projectiles are client side after spawning?
             //NetworkServer.Spawn(projectile);
 
             // Destroy the explosion after x seconds

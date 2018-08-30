@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;   // Networking namespace
 
-public class WeaponPickup : MonoBehaviour
+public class WeaponPickup : NetworkBehaviour
 {
     public GameObject weapon;        //weapon prefab
     public GameObject pickup;        //pickup prefab
@@ -58,6 +59,9 @@ public class WeaponPickup : MonoBehaviour
                 GO.transform.position = GO.transform.parent.position;
                 GO.transform.rotation = GO.transform.parent.rotation;
                 //GO.gameObject.transform.SetSiblingIndex(weaponSlot);
+
+                // Spawn on the Clients
+                NetworkServer.Spawn(GO);
             }
             else
             {

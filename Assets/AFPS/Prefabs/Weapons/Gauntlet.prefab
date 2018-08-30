@@ -37,7 +37,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4146082947947168}
   - component: {fileID: 33296234484011348}
-  - component: {fileID: 65724402427018564}
   - component: {fileID: 23582557963126372}
   m_Layer: 0
   m_Name: WeaponModel
@@ -55,7 +54,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4598140256127168}
   - component: {fileID: 33523740505280764}
-  - component: {fileID: 136947953015011762}
   - component: {fileID: 23137795316737922}
   - component: {fileID: 114759531748245216}
   m_Layer: 0
@@ -75,6 +73,8 @@ GameObject:
   - component: {fileID: 4220106759905876}
   - component: {fileID: 82351788836567078}
   - component: {fileID: 114013559538920388}
+  - component: {fileID: 114685258051357370}
+  - component: {fileID: 114944935852143566}
   m_Layer: 0
   m_Name: Gauntlet
   m_TagString: Untagged
@@ -103,7 +103,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1989363170998128}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.640321, y: 1, z: 5.976532}
+  m_LocalPosition: {x: 7.36532, y: 1.894, z: 6.8016434}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4146082947947168}
@@ -219,18 +219,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977654395456512}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65724402427018564
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1472165753285334}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &82351788836567078
 AudioSource:
   m_ObjectHideFlags: 1
@@ -339,30 +327,70 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
   - {fileID: 8300000, guid: 62b33c04e6a8b104da1eab29fcc04f52, type: 3}
   timer: 0
+--- !u!114 &114685258051357370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1989363170998128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 149
+    i1: 249
+    i2: 240
+    i3: 69
+    i4: 129
+    i5: 186
+    i6: 240
+    i7: 132
+    i8: 75
+    i9: 248
+    i10: 50
+    i11: 216
+    i12: 45
+    i13: 225
+    i14: 39
+    i15: 39
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114759531748245216
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977654395456512}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25a21a6436a82b14aa73383301e576e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &136947953015011762
-CapsuleCollider:
+--- !u!114 &114944935852143566
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1977654395456512}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 1989363170998128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.05
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!198 &198074504954263742
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -423,7 +451,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1451140039
+  randomSeed: -1505396324
   InitialModule:
     serializedVersion: 3
     enabled: 1

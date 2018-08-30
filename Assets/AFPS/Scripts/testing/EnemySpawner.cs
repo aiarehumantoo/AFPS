@@ -1,27 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Networking;
 
-
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : NetworkBehaviour
 {
-    //public GameObject location;
-    public GameObject enemy;
 
-    void Start()
-    {
-        StartCoroutine(SpawnEnemy2());
-    }
+    public GameObject enemyPrefab;
+    public int numberOfEnemies;
 
-    public void SpawnEnemy()
-    {
-        StartCoroutine(SpawnEnemy2());
-    }
+    public GameObject[] spawnPos;
 
-    // Respawn enemy with delay
-    IEnumerator SpawnEnemy2()
+    // just for testing. make sure there are enough spawnpoints
+
+    public override void OnStartServer()
     {
-        yield return new WaitForSeconds(1);
-        Instantiate(enemy, transform.position, Quaternion.identity);
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            //var spawnPosition = new Vector3(Random.Range(-8.0f, 8.0f),0.0f,Random.Range(-8.0f, 8.0f));
+            var spawnPosition = spawnPos[i].transform.position;
+
+            var spawnRotation = Quaternion.Euler(0.0f,Random.Range(0, 180),0.0f);
+
+            var enemy = (GameObject)Instantiate(enemyPrefab, spawnPosition, spawnRotation);
+            NetworkServer.Spawn(enemy);
+        }
     }
 }

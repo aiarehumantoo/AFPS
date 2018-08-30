@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4577528285579082}
   - component: {fileID: 33135075809754382}
-  - component: {fileID: 65990083895239974}
   - component: {fileID: 23610549877837280}
   m_Layer: 0
   m_Name: WeaponModel (1)
@@ -57,6 +56,8 @@ GameObject:
   - component: {fileID: 82776920491360816}
   - component: {fileID: 114316542266743522}
   - component: {fileID: 120397768954361488}
+  - component: {fileID: 114052399999905724}
+  - component: {fileID: 114747818857178146}
   m_Layer: 0
   m_Name: LG
   m_TagString: Untagged
@@ -73,7 +74,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4445984551928430}
   - component: {fileID: 33765450741478708}
-  - component: {fileID: 65161189968407840}
   - component: {fileID: 23102002272678946}
   m_Layer: 0
   m_Name: WeaponModel
@@ -91,7 +91,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4004176917521028}
   - component: {fileID: 33670610852809672}
-  - component: {fileID: 65451430707355390}
   - component: {fileID: 23833295645408602}
   m_Layer: 0
   m_Name: WeaponModel (2)
@@ -161,7 +160,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1320765342165628}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6.842582, y: 2.74, z: 6.193724}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4445984551928430}
@@ -292,42 +291,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1625157827118118}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &65161189968407840
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1625157827118118}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65451430707355390
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1758694321144442}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65990083895239974
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1148584031191806}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &82776920491360816
 AudioSource:
   m_ObjectHideFlags: 1
@@ -408,6 +371,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &114052399999905724
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1320765342165628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 86
+    i1: 81
+    i2: 60
+    i3: 58
+    i4: 99
+    i5: 154
+    i6: 132
+    i7: 196
+    i8: 41
+    i9: 147
+    i10: 199
+    i11: 26
+    i12: 121
+    i13: 252
+    i14: 137
+    i15: 203
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!114 &114316542266743522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -435,6 +430,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 386803eca5deafc41825a2518531b3b9, type: 3}
   - {fileID: 8300000, guid: 62b33c04e6a8b104da1eab29fcc04f52, type: 3}
   timer: 0
+--- !u!114 &114747818857178146
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1320765342165628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.05
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!120 &120397768954361488
 LineRenderer:
   m_ObjectHideFlags: 1

@@ -9,7 +9,8 @@ public class ProjectileExplosion : MonoBehaviour
     Vector3 knockback;
     public float knockbackForce;
 
-    public FireWeapon parentScript;
+    //public FireWeapon parentScript;
+    public PlayerFire parentScript;
     public GameObject parentGameObject;
 
     void OnTriggerEnter(Collider other)             // Applied on first hit. calculate knockback based on distance to center of explosion.       !!Can bug out in certain situations if player is already inside the trigger and thus never enters it. maybe timestep issue, object disappears before next cycle?!!
