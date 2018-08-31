@@ -6,7 +6,7 @@ public class LaserTest2 : MonoBehaviour
     // Creates a line renderer that follows a Sin() function
     // and animates it.
 
-    public Transform startPoint;
+    public Transform endPoint;
 
 
     public Color c1 = Color.yellow;
@@ -18,7 +18,7 @@ public class LaserTest2 : MonoBehaviour
         LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
         lineRenderer.widthMultiplier = 0.2f;
-        lineRenderer.positionCount = lengthOfLineRenderer;
+        //lineRenderer.positionCount = lengthOfLineRenderer;
 
         // A simple 2 color gradient with a fixed alpha of 1.0f.
         float alpha = 1.0f;
@@ -33,17 +33,18 @@ public class LaserTest2 : MonoBehaviour
     void Update()
     {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
-        var points = new Vector3[lengthOfLineRenderer];
+
         /*
+        var points = new Vector3[lengthOfLineRenderer];
         var t = Time.time;
         for (int i = 0; i < lengthOfLineRenderer; i++)
         {
             points[i] = new Vector3(i * 0.5f, Mathf.Sin(i + t), 0.0f);
         }
-        */
-        points[0] = startPoint.transform.position;
-        //points[1] = startPoint.forward * 100;
-
         lineRenderer.SetPositions(points);
+        */
+
+        lineRenderer.SetPosition(0, transform.position);
+        lineRenderer.SetPosition(1, endPoint.transform.position);
     }
 }

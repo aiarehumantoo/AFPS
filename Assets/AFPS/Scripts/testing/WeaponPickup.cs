@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;   // Networking namespace
 
-public class WeaponPickup : NetworkBehaviour
+public class WeaponPickup : MonoBehaviour
 {
     public GameObject weapon;        //weapon prefab            // not spawning weapons anymore
     public string weaponName;

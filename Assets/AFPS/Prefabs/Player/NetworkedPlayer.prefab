@@ -49,8 +49,8 @@ GameObject:
   - component: {fileID: 114498851487488832}
   - component: {fileID: 114435489366054190}
   - component: {fileID: 114391815210796764}
-  - component: {fileID: 114869248008751916}
   - component: {fileID: 120249170985350094}
+  - component: {fileID: 114432852400551586}
   m_Layer: 10
   m_Name: NetworkedPlayer
   m_TagString: Player
@@ -421,7 +421,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1053250701651464}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.735455, y: 3.46, z: 20.905598}
+  m_LocalPosition: {x: 14.13783, y: 2.902, z: -4.9503703}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224476920467603708}
@@ -1031,6 +1031,7 @@ MonoBehaviour:
   lg: 0
   rail: 0
   rl: 0
+  currentWeapon: Gauntlet
   rocketPrefab: {fileID: 1713020173618030, guid: 335e456f107bad64ba0b09a7c1aa16a6,
     type: 2}
   plasmaPrefab: {fileID: 1545942380009992, guid: d9ca4b686aa53c145ad3118966e3f8d9,
@@ -1051,6 +1052,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crosshairImage: {fileID: 2800000, guid: abc6831d9346f8a4fa630ddcc77eddcb, type: 3}
+--- !u!114 &114432852400551586
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1053250701651464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 224476920467603708}
+  m_ChildIndex: 0
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114435489366054190
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1292,28 +1312,6 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
---- !u!114 &114869248008751916
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1053250701651464}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 104af5a5d6d938d46b16ab5478a559cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damagePerShot: 7
-  timeBetweenBullets: 1
-  range: 100
-  weaponSlot: 0
-  projectile: 0
-  projectilePrefab: {fileID: 1713020173618030, guid: 335e456f107bad64ba0b09a7c1aa16a6,
-    type: 2}
-  projectileSpeed: 25
-  splashRadius: 0
-  maximumSplashDamage: 0
-  timer: 0
 --- !u!120 &120249170985350094
 LineRenderer:
   m_ObjectHideFlags: 1

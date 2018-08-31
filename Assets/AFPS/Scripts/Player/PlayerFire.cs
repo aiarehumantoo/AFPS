@@ -111,6 +111,12 @@ public class PlayerFire : NetworkBehaviour
             // Sync weapon
             CmdSyncWeapon(currentWeapon);
         }
+        // dc
+        if(numberOfPlayers > NetworkManager.singleton.numPlayers)
+        {
+            numberOfPlayers = NetworkManager.singleton.numPlayers;
+            Debug.Log(numberOfPlayers);
+        }
     }
 
     void Update()

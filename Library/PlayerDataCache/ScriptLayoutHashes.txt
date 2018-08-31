@@ -168,7 +168,7 @@ aedd90f97d0028b397b9e8c74d2cc297 Assembly-CSharp.dll:.Settings
 6705e1544d4c32e12be06a00544ba009 Assembly-CSharp.dll:.PlayerHealth
 e0f7ffd5d5c2abe4b2e16569a21163da UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioRoom
 e0f7ffd5d5c2abe4b2e16569a21163da UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioRoom
-364499640e72f353b5822f81be84390d Assembly-CSharp.dll:.LaserTest2
+0f10e7e3da6f3a3793a0d9950210f8f7 Assembly-CSharp.dll:.LaserTest2
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.rail
 82c6192ece8decc1abce9eae5bc44e95 Assembly-CSharp.dll:.HighlightNearestFace
 bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.AudioSpatializerMicrosoft
