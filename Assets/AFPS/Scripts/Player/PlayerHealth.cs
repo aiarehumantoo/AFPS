@@ -247,7 +247,7 @@ public class PlayerHealth : NetworkBehaviour
 
         // Respawn with starting weapon(s)
         //selectWeapon.Respawn();
-        playerFire.Respawn();
+        playerFire.CmdRespawn();
 
         // Health at spawn
         currentHealth = startingHealth;

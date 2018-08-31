@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//old
+
 public class WeaponSwitching : MonoBehaviour
 {
     public int selectedWeapon = 0;      //public just to see value in editor

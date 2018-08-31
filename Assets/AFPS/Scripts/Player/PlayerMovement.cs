@@ -98,7 +98,9 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         // Enable camera / audio listener. This way these are active only on local player
-        playerView.gameObject.SetActive(true);
+        //playerView.gameObject.SetActive(true);
+        playerView.gameObject.GetComponent<Camera>().enabled = true;
+        playerView.gameObject.GetComponent<AudioListener>().enabled = true;
 
         // Hide the cursor
         Cursor.visible = false;
@@ -115,6 +117,11 @@ public class PlayerMovement : NetworkBehaviour
 
     private void Update()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
 
         #region MouseControls
 

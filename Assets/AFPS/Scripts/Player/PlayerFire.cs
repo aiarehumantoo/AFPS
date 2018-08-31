@@ -5,12 +5,19 @@ using UnityEngine.Networking;
 
 public class PlayerFire : NetworkBehaviour
 {
-    // Weapons
-    bool gauntlet = true;
-    bool plasma;
-    bool lg;
-    bool rail;
-    bool rl;
+    // Weapons, public for testing purposes
+    [SyncVar]
+    public bool gauntlet = true;
+    [SyncVar]
+    public bool plasma;
+    [SyncVar]
+    public bool lg;
+    [SyncVar]
+    public bool rail;
+    [SyncVar]
+    public bool rl;
+    [SyncVar(hook = "OnWeaponChange")]
+    public string currentWeapon = "Gauntlet";
 
     // Stats
     int damagePerShot;                         // The damage inflicted by each shot.                        lg = 7, rail = 30, plasma = 20, rl = 100
@@ -47,7 +54,10 @@ public class PlayerFire : NetworkBehaviour
     RaycastHit shootHit;                            // A raycast hit to get information about what was hit.
     int shootableMask;                              // A layer mask so the raycast only hits things on the shootable layer.
 
+    int numberOfPlayers;
+
     void Start()
+    //public override void OnStartLocalPlayer()
     {
         if (!isLocalPlayer)
         {
@@ -70,7 +80,37 @@ public class PlayerFire : NetworkBehaviour
         timer = timeBetweenShots; // Start without cooldown
 
         //Starting weapon (gauntlet) stats
-        ChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+    }
+
+    // Called when string currentWeapon changes                         TESTING
+    void OnWeaponChange(string currentWeapon)
+    {
+        //Debug.Log(currentWeapon);
+        //CmdSyncWeapon(currentWeapon);
+    }
+
+    /*
+    void OnPlayerConnected(NetworkPlayer player)                                // Not called?
+    {
+        Debug.Log("new player connected");
+
+        // Sync current state when new player joins
+        CmdSyncWeapon(currentWeapon);
+    }
+    */
+
+    void OnPlayerConnect()
+    {
+        // When new player joins
+        if (numberOfPlayers < NetworkManager.singleton.numPlayers)
+        {
+            numberOfPlayers = NetworkManager.singleton.numPlayers;
+            Debug.Log(numberOfPlayers);
+
+            // Sync weapon
+            CmdSyncWeapon(currentWeapon);
+        }
     }
 
     void Update()
@@ -80,7 +120,10 @@ public class PlayerFire : NetworkBehaviour
             return;
         }
 
-        SelectWeapon();
+        OnPlayerConnect();
+
+        //SelectWeapon();
+        CmdSelectWeapon();
 
         // Add the time since Update was last called to the timer.
         timer += Time.deltaTime;
@@ -91,7 +134,7 @@ public class PlayerFire : NetworkBehaviour
             beamLine.SetPosition(0, transform.GetChild(0).GetChild(0).position);
         }
         //Disable beam sfx
-        if (useBeam && !Input.GetButton("Fire1") && timer >= effectDisplayTime)
+        if (!Input.GetButton("Fire1") && timer >= effectDisplayTime)
         {
             beamLine.enabled = false;
         }
@@ -214,7 +257,9 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
-    void SelectWeapon()
+    // Woops. can "change" to already selected weapon. Will be problem later on with animations and whatnot         <-- FIX
+    [Command]
+    void CmdSelectWeapon()
     {
         if (timer < timeBetweenShots || Input.GetButton("Fire1"))            // To change a weapon, current weapon must be ready to fire and player cannot be shooting
         {
@@ -224,32 +269,51 @@ public class PlayerFire : NetworkBehaviour
         // Input to select this weapon and player has it available
         if (Input.GetButton("Gauntlet") && gauntlet)
         {
-            ChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+            CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
         }
 
         if (Input.GetButton("Plasma") && plasma)
         {
-            ChangeWeapon("Plasma", 20, 0.11f, 0, false, true, plasmaPrefab, 25, 15);
+            CmdChangeWeapon("Plasma", 20, 0.11f, 0, false, true, plasmaPrefab, 25, 15);
         }
 
         if (Input.GetButton("RL") && rl)
         {
-            ChangeWeapon("RocketLauncher", 100, 0.8f, 0, false, true, rocketPrefab, 25, 100);
+            CmdChangeWeapon("RocketLauncher", 100, 0.8f, 0, false, true, rocketPrefab, 25, 100);
         }
 
         if (Input.GetButton("LG") && lg)
         {
-            ChangeWeapon("LG", 7, 0.055f, 50, true, false, null, 0, 0);
+            CmdChangeWeapon("LG", 7, 0.055f, 50, true, false, null, 0, 0);
         }
 
         if (Input.GetButton("Rail") && rail)
         {
-            ChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0);
+            CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0);
         }
     }
 
-    void ChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg)
+    // Quick fix for syncing weapon states when new player joins
+    [Command]
+    void CmdSyncWeapon(string currentWeapon)
     {
+        if(currentWeapon == "Gauntlet")
+            CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+        if (currentWeapon == "Plasma")
+            CmdChangeWeapon("Plasma", 20, 0.11f, 0, false, true, plasmaPrefab, 25, 15);
+        if (currentWeapon == "RL")
+            CmdChangeWeapon("RocketLauncher", 100, 0.8f, 0, false, true, rocketPrefab, 25, 100);
+        if (currentWeapon == "LG")
+            CmdChangeWeapon("LG", 7, 0.055f, 50, true, false, null, 0, 0);
+        if (currentWeapon == "Rail")
+            CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0);
+    }
+
+    [Command]
+    //[ClientRpc]
+    void CmdChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg)
+    {
+        currentWeapon = weapon;     // kinda pointless to have weapon and currentweapon
         useBeam = beam;
         projectile = isProjectile;
         damagePerShot = damage;
@@ -266,10 +330,13 @@ public class PlayerFire : NetworkBehaviour
         }
 
         // Show corrent weapon model
-        ChangeWeaponModel(weapon);
+        //CmdChangeWeaponModel(weapon);
+        RpcChangeWeaponModel(weapon);
     }
 
-    void ChangeWeaponModel(string weapon)
+    //[Command]
+    [ClientRpc]
+    void RpcChangeWeaponModel(string weapon)
     {
         // Disable every weapon model
         for (int i = 0; i < transform.GetChild(0).GetChild(0).childCount; i++)
@@ -284,6 +351,11 @@ public class PlayerFire : NetworkBehaviour
 
     public void PlayHitSounds(bool kill)
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         if (kill) //killshot
         {
             m_AudioSource.clip = m_HitSounds[1];
@@ -296,10 +368,11 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
-    public void Respawn()
+    [Command]
+    public void CmdRespawn()
     {
         //Starting weapon (gauntlet) stats
-        ChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
 
         // Disable other weapons
         plasma = false;
