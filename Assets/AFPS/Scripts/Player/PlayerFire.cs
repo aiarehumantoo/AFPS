@@ -40,7 +40,7 @@ public class PlayerFire : NetworkBehaviour
 
     // SFX
     bool useBeam;                                   // Does this weapon use beam sfx?
-    float effectDisplayTime = 0.1f;                     // For how long beam is displayed
+    float effectDisplayTime = 0.25f;                     // For how long beam is displayed
     //public ParticleSystem impactEffect;
     public AudioClip[] m_HitSounds;
 
@@ -135,12 +135,18 @@ public class PlayerFire : NetworkBehaviour
         timer += Time.deltaTime;
 
         // Update beam sfx starting position (weapon origin)
-        if (useBeam && Input.GetButton("Fire1"))
+        //if (useBeam && Input.GetButton("Fire1"))
+        if(useBeam && currentWeapon == "LG")
         {
             beamLine.SetPosition(0, transform.GetChild(0).GetChild(0).position);
         }
         //Disable beam sfx
-        if (!Input.GetButton("Fire1") && timer >= effectDisplayTime)
+        //if (!Input.GetButton("Fire1") && timer >= effectDisplayTime)
+        if (currentWeapon == "Rail" && timer >= effectDisplayTime)
+        {
+            beamLine.enabled = false;
+        }
+        if (currentWeapon == "LG" && !Input.GetButton("Fire1"))
         {
             beamLine.enabled = false;
         }
@@ -202,6 +208,7 @@ public class PlayerFire : NetworkBehaviour
         // Enable line renderer
         if (useBeam)
         {
+            beamLine.SetPosition(0, transform.GetChild(0).GetChild(0).position);
             beamLine.enabled = true;
         }
 
