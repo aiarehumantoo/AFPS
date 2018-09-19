@@ -17,23 +17,6 @@ public class Projectile : MonoBehaviour
     public GameObject explosionPrefab;
 
 
-
-    //TODO
-    /*
-     * Same properties as for hitscan weapons
-     *      "enemy" & "environment" layers
-     *      
-     * 
-     * Splash damage & sfx
-     * 
-     * 
-     * Hit detection is bit lacking. sometimes explosion spawns inside a wall
-     *
-     * 
-     */
-
-
-
     void OnTriggerEnter(Collider other)
     {
         // Direct hit
@@ -49,7 +32,7 @@ public class Projectile : MonoBehaviour
             knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force                                            
 
             // Deal damage
-            TargetDummy targetDummy = other.gameObject.GetComponent<TargetDummy>();
+            TargetDummy targetDummy = other.gameObject.GetComponent<TargetDummy>();         // Target dummy for testing
             if (targetDummy != null)
             {
                 // ... the enemy should take damage.
@@ -65,6 +48,7 @@ public class Projectile : MonoBehaviour
                     parentScript.PlayHitSounds(false);
                 }
             }
+
             PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
@@ -80,35 +64,46 @@ public class Projectile : MonoBehaviour
                 {
                     parentScript.PlayHitSounds(false);
                 }
-
             }
+
+            // Spawn explosion
+            Explosion(other.gameObject);        // other.transform.root.gameobject if there are other colliders besides root (player)
         }
 
-        // Hits terrain                                                                                                             // NO SPLASH DAMAGE ON DIRECT HITS
+        // Hits terrain 
         if(other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             // Spawn explosion
-            var explosion = (GameObject)Instantiate(explosionPrefab, transform.position, transform.rotation);
-
-            // Explosion stats
-            ProjectileExplosion explosionScript = explosion.GetComponent<ProjectileExplosion>();
-            //explosionScript.damagePerShot = damagePerShot;
-            explosionScript.splashDamage = splashDamage;
-            explosionScript.knockbackForce = knockbackForce;
-
-            // Link parent script
-            explosionScript.parentScript = parentScript;
-            // Link player gameobject
-            explosionScript.parentGameObject = parentGameObject;
-
-            // Spawn the explosion on the Clients                                       // No need to do this since projectiles are client side after spawning?
-            //NetworkServer.Spawn(projectile);
-
-            // Destroy the explosion after x seconds
-            Destroy(explosion, 0.25f);
+            Explosion(null);
         }
 
         // Destroy projectile
         Destroy(gameObject);
+    }
+
+    void Explosion(GameObject direct)
+    {
+        // Spawn explosion
+        var explosion = (GameObject)Instantiate(explosionPrefab, transform.position, transform.rotation);
+
+        // Explosion stats
+        ProjectileExplosion explosionScript = explosion.GetComponent<ProjectileExplosion>();
+        //explosionScript.damagePerShot = damagePerShot;
+        explosionScript.splashDamage = splashDamage;
+        explosionScript.knockbackForce = knockbackForce;
+
+        // Link parent script
+        explosionScript.parentScript = parentScript;
+        // Link player gameobject
+        explosionScript.parentGameObject = parentGameObject;
+
+        // Player that got hit directly
+        explosionScript.directHit = direct;
+
+        // Spawn the explosion on the Clients                                       // No need to do this since projectiles are client side after spawning?
+        //NetworkServer.Spawn(projectile);
+
+        // Destroy the explosion after x seconds
+        Destroy(explosion, 0.25f);
     }
 }

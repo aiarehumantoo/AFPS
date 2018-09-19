@@ -198,7 +198,7 @@ public class PlayerFire : NetworkBehaviour
         // Spawn the projectile on the Clients
         NetworkServer.Spawn(projectile);
 
-        // Destroy the bullet after x seconds
+        // Destroy the projectile after x seconds
         Destroy(projectile, projectileLifeTime);
     }
 
