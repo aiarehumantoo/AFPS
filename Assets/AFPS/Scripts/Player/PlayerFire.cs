@@ -64,6 +64,9 @@ public class PlayerFire : NetworkBehaviour
             return;
         }
 
+        //Set layer of local player to "Player" (Layer 9) instead of "Enemy" layer
+        gameObject.layer = 9;
+
         // Create a layer mask for the Shootable layer.
         shootableMask = LayerMask.GetMask("Enemy", "Environment");
 
@@ -80,7 +83,7 @@ public class PlayerFire : NetworkBehaviour
         timer = timeBetweenShots; // Start without cooldown
 
         //Starting weapon (gauntlet) stats
-        CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
     }
 
     // Called when string currentWeapon changes                         TESTING
@@ -219,12 +222,6 @@ public class PlayerFire : NetworkBehaviour
         // Perform the raycast against gameobjects on the shootable layer and if it hits something...
         if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
         {
-            // Workaround for self hits. problem atleast with jumppads                                                              //<-- FIX. allow raycast to hit multiple targets + ignore shooter? + boolean for toggling multi target since only railgun hits mutiple targets
-            if (transform.root.gameObject == shootHit.transform.gameObject)                                                         // Set layer locally? Start as enemy, change into player and then this new layer is ignored? should work as long as change isnt updated for other clients
-            {                                                                                                                                   // or just set starting point just outside of the players collider
-                //return;
-            }
-            //
 
             HitDummy();     // For testing
 
@@ -282,7 +279,7 @@ public class PlayerFire : NetworkBehaviour
         // Input to select this weapon and player has it available
         if (Input.GetButton("Gauntlet") && gauntlet)
         {
-            CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+            CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
         }
 
         if (Input.GetButton("Plasma") && plasma)
@@ -311,7 +308,7 @@ public class PlayerFire : NetworkBehaviour
     void CmdSyncWeapon(string currentWeapon)
     {
         if(currentWeapon == "Gauntlet")
-            CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+            CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
         if (currentWeapon == "Plasma")
             CmdChangeWeapon("Plasma", 20, 0.11f, 0, false, true, plasmaPrefab, 25, 15);
         if (currentWeapon == "RL")
@@ -331,6 +328,7 @@ public class PlayerFire : NetworkBehaviour
         projectile = isProjectile;
         damagePerShot = damage;
         timeBetweenShots = firerate;
+        timer = firerate;
         range = maxRange;
         //knockbackForce        // same for all weapons. for now atleast
 
@@ -385,7 +383,7 @@ public class PlayerFire : NetworkBehaviour
     public void CmdRespawn()
     {
         //Starting weapon (gauntlet) stats
-        CmdChangeWeapon("Gauntlet", 14, 0.55f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
 
         // Disable other weapons
         plasma = false;
