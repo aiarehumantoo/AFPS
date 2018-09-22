@@ -21,7 +21,7 @@ public class ProjectileExplosion : MonoBehaviour
         if (other.tag == "Player")
         {
             // Ignore player that got hit directly by the projectile
-            if (directHit == other.gameObject || directHit == null)
+            if (directHit == other.gameObject)
             {
                 return;
             }

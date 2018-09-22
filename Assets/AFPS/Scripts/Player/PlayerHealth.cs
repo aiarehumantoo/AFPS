@@ -51,7 +51,7 @@ public class PlayerHealth : NetworkBehaviour
 
     /*
      * Update TakeDamage() 
-     *      Use float instead of int to get rid of rounding
+     *      Use float instead of int to get rid of cutoff
      *      ie. 7 / 2 = 3.5
      *      but int displays result as 3
      *      
@@ -86,7 +86,6 @@ public class PlayerHealth : NetworkBehaviour
 
     private void Update()
     {
-        ////////////////////////////////
         if (!isServer)
         {
             return;

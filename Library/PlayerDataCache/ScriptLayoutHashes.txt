@@ -133,7 +133,7 @@ be1f173d56b135ab84bd519ff7635313 Assembly-CSharp.dll:.WeaponSwitching
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 e7b794762c7e10d80c0629a656d18c10 Assembly-CSharp.dll:.Spawn
 b829775432b70bf96111121000c771c6 Assembly-CSharp.dll:.KillBox
-3519071564cba63323b68e8f49a4af39 Assembly-CSharp.dll:.ProjectileExplosion
+feddf01e5446b3bf4b7b8abcc8477728 Assembly-CSharp.dll:.ProjectileExplosion
 a13e348db57cdb225ef648cd7f959981 ProBuilderCore-Unity5.dll:ProBuilder2.Common.pb_BezierShape
 d65f8e166eb4df1e46eb9eaa8ee261c1 ProBuilderCore-Unity5.dll:ProBuilder2.Common.pb_ColorPalette
 05524b8f659e7bfe5756d1335fec24ba ProBuilderCore-Unity5.dll:.pb_DummyScript

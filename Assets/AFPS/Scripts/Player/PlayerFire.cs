@@ -90,7 +90,7 @@ public class PlayerFire : NetworkBehaviour
     void OnWeaponChange(string currentWeapon)
     {
         //Debug.Log(currentWeapon);
-        //CmdSyncWeapon(currentWeapon);
+        CmdSyncWeapon(currentWeapon);
     }
 
     /*
@@ -131,7 +131,6 @@ public class PlayerFire : NetworkBehaviour
 
         OnPlayerConnect();
 
-        //SelectWeapon();
         CmdSelectWeapon();
 
         // Add the time since Update was last called to the timer.
@@ -320,7 +319,6 @@ public class PlayerFire : NetworkBehaviour
     }
 
     [Command]
-    //[ClientRpc]
     void CmdChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg)
     {
         currentWeapon = weapon;     // kinda pointless to have weapon and currentweapon
@@ -341,11 +339,9 @@ public class PlayerFire : NetworkBehaviour
         }
 
         // Show corrent weapon model
-        //CmdChangeWeaponModel(weapon);
         RpcChangeWeaponModel(weapon);
     }
 
-    //[Command]
     [ClientRpc]
     void RpcChangeWeaponModel(string weapon)
     {
@@ -383,7 +379,7 @@ public class PlayerFire : NetworkBehaviour
     public void CmdRespawn()
     {
         //Starting weapon (gauntlet) stats
-        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
+        //CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
 
         // Disable other weapons
         plasma = false;
