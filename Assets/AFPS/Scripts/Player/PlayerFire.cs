@@ -20,9 +20,9 @@ public class PlayerFire : NetworkBehaviour
     public string currentWeapon = "Gauntlet";
 
     // Stats
-    int damagePerShot;                         // The damage inflicted by each shot.                        lg = 7, rail = 30, plasma = 20, rl = 100
-    float timeBetweenShots;              // The time between each shot.                          lg = 0.055f, rail = 1.5f, plasma = 0.11, rl  = 0.8
-    float range;                             // The distance the gun can fire.
+    int damagePerShot = 14;                         // The damage inflicted by each shot.                        lg = 7, rail = 30, plasma = 20, rl = 100
+    float timeBetweenShots = 0.055f;              // The time between each shot.                          lg = 0.055f, rail = 1.5f, plasma = 0.11, rl  = 0.8
+    float range = 2;                             // The distance the gun can fire.
     Vector3 knockback;
     float knockbackForce = 5f;
 
@@ -379,7 +379,7 @@ public class PlayerFire : NetworkBehaviour
     public void CmdRespawn()
     {
         //Starting weapon (gauntlet) stats
-        //CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
 
         // Disable other weapons
         plasma = false;

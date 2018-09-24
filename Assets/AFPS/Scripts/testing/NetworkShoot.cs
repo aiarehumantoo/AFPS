@@ -50,7 +50,7 @@ public class NetworkShoot : NetworkBehaviour
         timer += Time.deltaTime;
 
 
-        if (Input.GetButton("Fire1") && timer >= timeBetweenBullets && Time.timeScale != 0)
+        if (Input.GetButton("Fire1") && timer >= timeBetweenBullets)        // && Time.timeScale != 0
         {
             CmdFire();
         }
@@ -80,7 +80,7 @@ public class NetworkShoot : NetworkBehaviour
         // Link this script
         //projectileScript.parentScript = GetComponent<FireWeapon>();
         // Link player gameobject
-        projectileScript.parentGameObject = transform.root.gameObject;
+        projectileScript.parentGameObject = transform.root.gameObject;                      //old stuff
 
         // Spawn the projectile on the Clients
         NetworkServer.Spawn(projectile);
