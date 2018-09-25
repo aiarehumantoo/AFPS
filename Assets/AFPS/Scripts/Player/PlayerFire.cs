@@ -32,7 +32,7 @@ public class PlayerFire : NetworkBehaviour
 
     // Projectiles
     [SyncVar]
-    bool projectile;
+    bool projectile = false;
     GameObject projectilePrefab;             // Prefab of the projectile
     float spawnDistance = 0.0f;                          // How far from the player projectile should spawn                         // Spawn distance is pointless with projectiles igonring the shooter. Might be needed for better visuals?
     [SyncVar]
@@ -67,6 +67,9 @@ public class PlayerFire : NetworkBehaviour
     void Start()
     //public override void OnStartLocalPlayer()
     {
+        //get camera
+        camera = transform.GetChild(0);
+
         if (!isLocalPlayer)
         {
             return;
@@ -86,9 +89,6 @@ public class PlayerFire : NetworkBehaviour
         // Get line renderer component
         beamLine = GetComponent<LineRenderer>();
         beamLine.enabled = false;
-
-        //get camera
-        camera = transform.GetChild(0);
 
         timer = timeBetweenShots; // Start without cooldown
 
@@ -140,8 +140,6 @@ public class PlayerFire : NetworkBehaviour
         }
 
         OnPlayerConnect();
-
-        //CmdSelectWeapon();
         SelectWeapon();
 
         // Add the time since Update was last called to the timer.
@@ -165,7 +163,7 @@ public class PlayerFire : NetworkBehaviour
         }
 
         // If the Fire1 button is being pressed and it's time to fire...
-        if (Input.GetButton("Fire1") && timer >= timeBetweenShots && Time.timeScale != 0)
+        if (Input.GetButton("Fire1") && timer >= timeBetweenShots)
         {
             // Reset the timer.                                                                                         Note that resetting timer in [Command] would not reset timer for local player.
             timer = 0f;
@@ -189,7 +187,8 @@ public class PlayerFire : NetworkBehaviour
         Vector3 projectileSpawn = camera.position + camera.transform.forward.normalized * spawnDistance;
 
         // Create the projectile from the Prefab
-        var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn, camera.rotation);
+        //var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn, camera.rotation);                     //Cannot syncvar a gameobject
+        var projectile = (GameObject)Instantiate(rocketPrefab, projectileSpawn, camera.rotation);
 
         // Add velocity to the projectile
         projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * projectileSpeed;
@@ -236,6 +235,7 @@ public class PlayerFire : NetworkBehaviour
             PlayerHealth playerHealth = shootHit.collider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
+                //Calculate knockback
                 knockback = camera.transform.forward.normalized * knockbackForce;
 
                 // ... the enemy should take damage.
@@ -275,8 +275,7 @@ public class PlayerFire : NetworkBehaviour
     }
 
     // Woops. can "change" to already selected weapon. Will be problem later on with animations and whatnot         <-- FIX
-    //[Command]
-    //void CmdSelectWeapon()
+
     void SelectWeapon()
     {
         if (timer < timeBetweenShots || Input.GetButton("Fire1"))            // To change a weapon, current weapon must be ready to fire and player cannot be shooting
