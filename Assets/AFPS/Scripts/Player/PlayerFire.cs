@@ -20,18 +20,25 @@ public class PlayerFire : NetworkBehaviour
     public string currentWeapon = "Gauntlet";
 
     // Stats
+    [SyncVar]
     int damagePerShot = 14;                         // The damage inflicted by each shot.                        lg = 7, rail = 30, plasma = 20, rl = 100
+    [SyncVar]
     float timeBetweenShots = 0.055f;              // The time between each shot.                          lg = 0.055f, rail = 1.5f, plasma = 0.11, rl  = 0.8
+    [SyncVar]
     float range = 2;                             // The distance the gun can fire.
     Vector3 knockback;
+    [SyncVar]
     float knockbackForce = 5f;
 
     // Projectiles
+    [SyncVar]
     bool projectile;
     GameObject projectilePrefab;             // Prefab of the projectile
     float spawnDistance = 0.0f;                          // How far from the player projectile should spawn                         // Spawn distance is pointless with projectiles igonring the shooter. Might be needed for better visuals?
+    [SyncVar]
     int projectileSpeed = 25;
     float splashRadius;                                                                                                      // Currently using prefab size for explosion / splash size
+    [SyncVar]
     int maximumSplashDamage;
     float projectileLifeTime = 2.0f;                // For deleting projectiles that hit nothing
 
@@ -39,6 +46,7 @@ public class PlayerFire : NetworkBehaviour
     public GameObject plasmaPrefab;     // Plasma projectile
 
     // SFX
+    [SyncVar]
     bool useBeam;                                   // Does this weapon use beam sfx?
     float effectDisplayTime = 0.25f;                     // For how long beam is displayed
     //public ParticleSystem impactEffect;
@@ -63,6 +71,8 @@ public class PlayerFire : NetworkBehaviour
         {
             return;
         }
+
+        gameObject.name = "Local Player";
 
         //Set layer of local player to "Player" (Layer 9) instead of "Enemy" layer
         gameObject.layer = 9;
@@ -90,7 +100,6 @@ public class PlayerFire : NetworkBehaviour
     void OnWeaponChange(string currentWeapon)
     {
         //Debug.Log(currentWeapon);
-        CmdSyncWeapon(currentWeapon);
     }
 
     /*
@@ -109,16 +118,17 @@ public class PlayerFire : NetworkBehaviour
         if (numberOfPlayers < NetworkManager.singleton.numPlayers)
         {
             numberOfPlayers = NetworkManager.singleton.numPlayers;
-            Debug.Log(numberOfPlayers);
+            Debug.Log("Players; " +numberOfPlayers);
 
             // Sync weapon
-            CmdSyncWeapon(currentWeapon);
+            //CmdSyncWeapon(currentWeapon);                             weapon stats kept in sync with syncvar
+            CmdSyncWeaponModel(currentWeapon);
         }
         // dc
         if(numberOfPlayers > NetworkManager.singleton.numPlayers)
         {
             numberOfPlayers = NetworkManager.singleton.numPlayers;
-            Debug.Log(numberOfPlayers);
+            Debug.Log("Players; " +numberOfPlayers);
         }
     }
 
@@ -131,7 +141,8 @@ public class PlayerFire : NetworkBehaviour
 
         OnPlayerConnect();
 
-        CmdSelectWeapon();
+        //CmdSelectWeapon();
+        SelectWeapon();
 
         // Add the time since Update was last called to the timer.
         timer += Time.deltaTime;
@@ -156,6 +167,9 @@ public class PlayerFire : NetworkBehaviour
         // If the Fire1 button is being pressed and it's time to fire...
         if (Input.GetButton("Fire1") && timer >= timeBetweenShots && Time.timeScale != 0)
         {
+            // Reset the timer.                                                                                         Note that resetting timer in [Command] would not reset timer for local player.
+            timer = 0f;
+
             // ... shoot the gun.
             if (projectile)
             {
@@ -171,9 +185,6 @@ public class PlayerFire : NetworkBehaviour
     [Command]
     void CmdFireProjectile()
     {
-        // Reset the timer.
-        timer = 0f;
-
         // Spawn point
         Vector3 projectileSpawn = camera.position + camera.transform.forward.normalized * spawnDistance;
 
@@ -204,9 +215,6 @@ public class PlayerFire : NetworkBehaviour
     [Command]
     void CmdFireHitScan()
     {
-        // Reset the timer.
-        timer = 0f;
-
         // Enable line renderer
         if (useBeam)
         {
@@ -267,8 +275,9 @@ public class PlayerFire : NetworkBehaviour
     }
 
     // Woops. can "change" to already selected weapon. Will be problem later on with animations and whatnot         <-- FIX
-    [Command]
-    void CmdSelectWeapon()
+    //[Command]
+    //void CmdSelectWeapon()
+    void SelectWeapon()
     {
         if (timer < timeBetweenShots || Input.GetButton("Fire1"))            // To change a weapon, current weapon must be ready to fire and player cannot be shooting
         {
@@ -302,7 +311,8 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
-    // Quick fix for syncing weapon states when new player joins
+    /*
+    // Quick fix for syncing weapon states when new player joins                        not needed?
     [Command]
     void CmdSyncWeapon(string currentWeapon)
     {
@@ -317,6 +327,13 @@ public class PlayerFire : NetworkBehaviour
         if (currentWeapon == "Rail")
             CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0);
     }
+    */
+
+    [Command]
+    void CmdSyncWeaponModel(string weapon)
+    {
+        RpcChangeWeaponModel(weapon);
+    }
 
     [Command]
     void CmdChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg)
@@ -330,15 +347,12 @@ public class PlayerFire : NetworkBehaviour
         range = maxRange;
         //knockbackForce        // same for all weapons. for now atleast
 
-        if(isProjectile)
-        {
-            projectilePrefab = setProjectilePrefab;
-            maximumSplashDamage = 100;
-            projectileSpeed = setProjectileSpeed;
-            maximumSplashDamage = splashDmg;
-        }
+        projectilePrefab = setProjectilePrefab;
+        projectileSpeed = setProjectileSpeed;
+        maximumSplashDamage = splashDmg;
 
-        // Show corrent weapon model
+
+        // Show correct weapon model
         RpcChangeWeaponModel(weapon);
     }
 
@@ -351,7 +365,7 @@ public class PlayerFire : NetworkBehaviour
             transform.GetChild(0).GetChild(0).GetChild(i).gameObject.SetActive(false);
         }
 
-        // Enable selected weapon
+        // Enable selected weapon model
         transform.GetChild(0).GetChild(0).Find(weapon).gameObject.SetActive(true);
 
     }

@@ -10,7 +10,6 @@ public class Projectile : MonoBehaviour
     Vector3 knockback;
     public float knockbackForce;
 
-    //public FireWeapon parentScript;
     public PlayerFire parentScript;
     public GameObject parentGameObject;
 
@@ -19,15 +18,15 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        // Ignore player that shot the projectile
+        if (parentGameObject == other.gameObject)
+        {
+            return;
+        }
+
         // Direct hit
         if (other.tag == "Player")
         {
-            // Ignore player that shot the projectile
-            if(parentGameObject == other.gameObject)
-            {
-                return;
-            }
-
             // Calculate knockback (direct hit)                           // splash damage knockback = vector between origin and target (normalized)? (or without normalizing knockback will vary depending on distance. needs to be reversed tho for knockback to be stronger the closer it hits.
             knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force                                            
 
