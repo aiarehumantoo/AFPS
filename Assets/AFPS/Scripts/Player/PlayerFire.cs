@@ -188,7 +188,17 @@ public class PlayerFire : NetworkBehaviour
 
         // Create the projectile from the Prefab
         //var projectile = (GameObject)Instantiate(projectilePrefab, projectileSpawn, camera.rotation);                     //Cannot syncvar a gameobject
-        var projectile = (GameObject)Instantiate(rocketPrefab, projectileSpawn, camera.rotation);
+        //var projectile = (GameObject)Instantiate(rocketPrefab, projectileSpawn, camera.rotation);
+        GameObject projectile = null;
+
+        if (currentWeapon == "RocketLauncher")
+        {
+            projectile = (GameObject)Instantiate(rocketPrefab, projectileSpawn, camera.rotation);
+        }
+        if (currentWeapon == "Plasma")
+        {
+            projectile = (GameObject)Instantiate(plasmaPrefab, projectileSpawn, camera.rotation);
+        }
 
         // Add velocity to the projectile
         projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * projectileSpeed;
@@ -337,7 +347,7 @@ public class PlayerFire : NetworkBehaviour
     [Command]
     void CmdChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg)
     {
-        currentWeapon = weapon;     // kinda pointless to have weapon and currentweapon
+        currentWeapon = weapon;
         useBeam = beam;
         projectile = isProjectile;
         damagePerShot = damage;
