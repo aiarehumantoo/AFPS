@@ -51,7 +51,6 @@ GameObject:
   - component: {fileID: 114391815210796764}
   - component: {fileID: 120249170985350094}
   - component: {fileID: 114432852400551586}
-  - component: {fileID: 114181837315528060}
   m_Layer: 10
   m_Name: NetworkedPlayer
   m_TagString: Player
@@ -1016,24 +1015,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: 141
---- !u!114 &114181837315528060
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1053250701651464}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 409b443b4b2782f4b8670664bf38ae3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damagePerShot: 100
-  timeBetweenShots: 0.8
-  projectilePrefab: {fileID: 1713020173618030, guid: 335e456f107bad64ba0b09a7c1aa16a6,
-    type: 2}
-  projectileSpeed: 25
-  maximumSplashDamage: 100
-  timer: 0
 --- !u!114 &114391815210796764
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1367,7 +1348,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 0.25

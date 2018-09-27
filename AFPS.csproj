@@ -324,6 +324,7 @@
     <Compile Include="Assets\AFPS\Scripts\testing\LineTest.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\NetworkShoot.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\PickupAnim.cs" />
+    <Compile Include="Assets\AFPS\Scripts\testing\playerfireold.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\rail.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\RocketTest.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\Rotate.cs" />
