@@ -132,8 +132,6 @@ public class PlayerHealth : NetworkBehaviour
         currentHealth -= amount;
 
         // Apply knockback
-        //playerVelocity += knockback * Time.deltaTime;
-        //_controller.Move(playerVelocity * Time.deltaTime);
         PlayerMovement playerMovement = GetComponent<PlayerMovement>();
         if (playerMovement != null)
         {

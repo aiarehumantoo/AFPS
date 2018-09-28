@@ -207,8 +207,13 @@ public class PlayerMovement : NetworkBehaviour
     public void KnockBack(Vector3 knockback)
     {
         // Apply knockback
-        //playerVelocity = knockback;
         playerVelocity += knockback;
+    }
+
+    public void JumpPad(Vector3 dir)
+    {
+        // Change player velocity
+        playerVelocity = dir;
     }
 
     private void SetMovementDir()

@@ -161,6 +161,7 @@ e9bdabf9265d758d56f01bb188916fa8 UnityEngine.Networking.dll:UnityEngine.Networki
 73843688b51256aed059f049c540bca8 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformChild
 528ea1fd7c01796fc60c4e2f172ea229 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkTransformVisualizer
 22e69b0ea7bc123369f89615f1959c44 Assembly-CSharp.dll:.PlayerFire
+22e69b0ea7bc123369f89615f1959c44 Assembly-CSharp.dll:.playerfireold
 aedd90f97d0028b397b9e8c74d2cc297 Assembly-CSharp.dll:.Settings
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
 96d0fbde9fd209878a0a291f82c9bcdd UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.PlaymodeTestsController
@@ -191,4 +192,3 @@ ab232dc3d94359ca42eabb9c72cbbb82 Assembly-CSharp.dll:.JumpPad
 b87b06e3b126daa6f2a4a3be6c9eff78 Assembly-CSharp.dll:.Crosshair
 32dcc1dca94294515dfea07e896e1a84 Assembly-CSharp.dll:ProBuilder2.Examples.RuntimeEdit
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.InputAI
-22e69b0ea7bc123369f89615f1959c44 Assembly-CSharp.dll:.playerfireold

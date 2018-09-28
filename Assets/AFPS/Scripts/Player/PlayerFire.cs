@@ -93,8 +93,8 @@ public class PlayerFire : NetworkBehaviour
 
         gameObject.name = "Local Player";
 
-        //Set layer of local player to "Player" (Layer 9) instead of "Enemy" layer
-        gameObject.layer = 9;
+        //Set layer of local player to "Player" (Layer 9) instead of "Enemy" layer              // Stops host from taking damage? But this should apply only to local player and not enemies?
+        //gameObject.layer = 9;
 
         // Create a layer mask for the Shootable layer.
         //shootableMask = LayerMask.GetMask("Enemy", "Environment");
@@ -224,7 +224,7 @@ public class PlayerFire : NetworkBehaviour
                     CmdToggleBeam(true);
                 }
 
-                //FireHitScan();
+                FireHitScan();
             }
         }
 
@@ -304,31 +304,11 @@ public class PlayerFire : NetworkBehaviour
         if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
         {
 
-            HitDummy();     // For testing
+            CmdHitDummy();     // For testing
 
-            // If the Health component exists...
-            PlayerHealth playerHealth = shootHit.collider.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                //Calculate knockback
-                knockback = camera.transform.forward.normalized * knockbackForce;
-
-                // ... the enemy should take damage.
-                //playerHealth.TakeDamage(damagePerShot, knockback);
-                CmdDealDamage();
-
-                // Hp drops to 0 after taking damage
-                if (playerHealth.currentHealth <= 0)
-                {
-                    // Last hit
-                    PlayHitSounds(true);
-                }
-                else
-                {
-                    PlayHitSounds(false);
-                }
-            }
-
+            // Deal damage
+            CmdHitPlayer();
+            
             // Impact effect
             //Impact();
 
@@ -336,9 +316,29 @@ public class PlayerFire : NetworkBehaviour
     }
 
     [Command]
-    void CmdDealDamage()
+    void CmdHitPlayer()
     {
+        // If the Health component exists...
+        PlayerHealth playerHealth = shootHit.collider.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            // Calculate knockback
+            knockback = camera.transform.forward.normalized * knockbackForce;
 
+            // ... the enemy should take damage.
+            playerHealth.TakeDamage(damagePerShot, knockback);
+
+            // Hp drops to 0 after taking damage
+            if (playerHealth.currentHealth <= 0)
+            {
+                // Last hit
+                PlayHitSounds(true);
+            }
+            else
+            {
+                PlayHitSounds(false);
+            }
+        }
     }
 
 
@@ -440,7 +440,7 @@ public class PlayerFire : NetworkBehaviour
     {
         if (!isLocalPlayer)
         {
-            return;
+            //return;
         }
 
         if (kill) //killshot
@@ -499,17 +499,14 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
-    void HitDummy()
+    [Command]
+    void CmdHitDummy()
     {
         // Try and find an Health script on the gameobject hit.
         TargetDummy targetDummy = shootHit.collider.GetComponent<TargetDummy>();
-
         if (targetDummy != null)
         {
-            // Knockback calculated using position of the weapon, use camera location instead to get correct vector?
-            //knockback = transform.forward.normalized * knockbackForce;                                                    // Knockback direction (normalized) * force
-            //knockback = (shootHit.transform.position - transform.position).normalized * knockbackForce;                   // Same as before
-
+            // Calculate knockback
             knockback = camera.transform.forward.normalized * knockbackForce;
 
             // ... the enemy should take damage.
@@ -524,7 +521,6 @@ public class PlayerFire : NetworkBehaviour
             {
                 PlayHitSounds(false);
             }
-
         }
     }
 }

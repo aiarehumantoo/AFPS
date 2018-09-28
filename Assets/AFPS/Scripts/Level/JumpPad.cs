@@ -9,6 +9,7 @@ public class JumpPad : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        /*
         // Using Knockback for jumppad force
         if (other.tag == "Player")
         {
@@ -17,6 +18,18 @@ public class JumpPad : MonoBehaviour
             {
                 direction = transform.up.normalized;
                 playerHealth.TakeDamage(0, direction * force);
+            }
+        }
+        */
+
+        // Set player velocity
+        if (other.tag == "Player")
+        {
+            PlayerMovement playerMovement = other.GetComponent<PlayerMovement>();
+            if (playerMovement != null)
+            {
+                direction = transform.up.normalized;
+                playerMovement.JumpPad(direction * force);
             }
         }
     }
