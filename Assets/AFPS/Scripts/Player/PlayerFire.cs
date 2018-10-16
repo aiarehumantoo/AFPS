@@ -339,6 +339,18 @@ public class PlayerFire : NetworkBehaviour
                 PlayHitSounds(false);
             }
         }
+
+        /*
+        //test
+        PlayerMovement playerMovement = shootHit.collider.GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            // Calculate knockback
+            knockback = camera.transform.forward.normalized * knockbackForce;
+
+            playerMovement.KnockBack(knockback);
+        }
+        */
     }
 
 
@@ -466,6 +478,9 @@ public class PlayerFire : NetworkBehaviour
         lg = false;
         rl = false;
         rail = false;
+
+        // Disable beam sfx
+        beamActive = false;
     }
 
     /*

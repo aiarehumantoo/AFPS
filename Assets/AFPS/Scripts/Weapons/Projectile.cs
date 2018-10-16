@@ -15,7 +15,6 @@ public class Projectile : MonoBehaviour
 
     public GameObject explosionPrefab;
 
-
     void OnTriggerEnter(Collider other)
     {
         // Ignore player that shot the projectile

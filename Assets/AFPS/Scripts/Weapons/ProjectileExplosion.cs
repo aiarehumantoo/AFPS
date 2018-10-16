@@ -55,7 +55,7 @@ public class ProjectileExplosion : MonoBehaviour
             {
                 // ... the enemy should take damage.
                 //playerHealth.TakeDamage(splashDamage, knockback);
-                playerHealth.TakeDamage(0, knockback);                                      // 0 damage to players, for testing rocket jumps
+                playerHealth.TakeDamage(0, knockback);                      // 0 damage to players, for testin rocket jumps
 
                 if (parentGameObject != other.transform.gameObject) // No hitsounds if self damage
                 {
