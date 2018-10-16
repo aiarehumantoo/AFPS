@@ -79,8 +79,10 @@ public class PlayerHealth : NetworkBehaviour
         playerFire = GetComponent<PlayerFire>();
 
         // Health at spawn
-        currentHealth = startingHealth;
-        currentArmor = startingArmor;
+        //currentHealth = startingHealth;
+        //currentArmor = startingArmor;
+        currentArmor = 0;                           //TESTING
+        currentHealth = 100;
         isDead = false;
     }
 
@@ -112,6 +114,7 @@ public class PlayerHealth : NetworkBehaviour
             return;
         }
 
+        /*                                                              disabled armor for testing purposes. health taking dmg directly
         // if player has enough armor
         if(currentArmor >= amount / armorDamageReduction)
         {
@@ -127,18 +130,17 @@ public class PlayerHealth : NetworkBehaviour
             // Armor left drops to zero
             currentArmor = 0;
         }
+        */
 
         // Reduce the current health by the amount of damage sustained.
         currentHealth -= amount;
 
-        /*
         // Apply knockback
         PlayerMovement playerMovement = GetComponent<PlayerMovement>();
         if (playerMovement != null)
         {
             playerMovement.KnockBack(knockback);    // Doing knockback in movement code
         }
-        */
 
         // If the current health is less than or equal to zero...
         if (currentHealth <= 0)

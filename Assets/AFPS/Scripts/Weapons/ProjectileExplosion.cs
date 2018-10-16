@@ -20,11 +20,13 @@ public class ProjectileExplosion : MonoBehaviour
         // Explosion hits player
         if (other.tag == "Player")
         {
+            /*  TRYING SPLITTING PROJECTILE DAMAGE TO IMPACT AND SPLASH DAMAGE INSTEAD OF DEALING FULL DAMAGE ON DIRECT HIT AND THEN IGNORING THAT TARGET WHEN CALCULATING SPLASH DAMAGE
             // Ignore player that got hit directly by the projectile
             if (directHit == other.gameObject)
             {
                 return;
             }
+            */
 
             // Calculate knockback
             knockback = (other.transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
@@ -36,7 +38,7 @@ public class ProjectileExplosion : MonoBehaviour
             TargetDummy targetDummy = other.gameObject.GetComponent<TargetDummy>();     // Dummy for testing
             if (targetDummy != null)
             {
-                // ... the enemy should take damage.
+                // ... the enemy should take damage.    (projectile splash damage)
                 targetDummy.TakeDamage(splashDamage, knockback);
 
                 // Hp drops to 0 after taking damage
@@ -54,8 +56,8 @@ public class ProjectileExplosion : MonoBehaviour
             if (playerHealth != null)
             {
                 // ... the enemy should take damage.
-                //playerHealth.TakeDamage(splashDamage, knockback);
-                playerHealth.TakeDamage(0, knockback);                      // 0 damage to players, for testin rocket jumps
+                playerHealth.TakeDamage(splashDamage, knockback);
+                //playerHealth.TakeDamage(0, knockback);                      // 0 damage to players, for testin rocket jumps
 
                 if (parentGameObject != other.transform.gameObject) // No hitsounds if self damage
                 {

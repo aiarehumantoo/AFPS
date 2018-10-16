@@ -34,7 +34,8 @@ public class Projectile : MonoBehaviour
             if (targetDummy != null)
             {
                 // ... the enemy should take damage.
-                targetDummy.TakeDamage(damagePerShot, knockback);
+                //targetDummy.TakeDamage(damagePerShot, knockback);
+                targetDummy.TakeDamage(damagePerShot, Vector3.zero);        // See below
 
                 // Hp drops to 0 after taking damage
                 if (targetDummy.currentHealth <= 0)
@@ -50,8 +51,9 @@ public class Projectile : MonoBehaviour
             PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                // ... the enemy should take damage.
-                playerHealth.TakeDamage(damagePerShot, knockback);
+                // ... the enemy should take damage.    (projectile impact damage)
+                //playerHealth.TakeDamage(damagePerShot, knockback);
+                playerHealth.TakeDamage(damagePerShot, Vector3.zero);                   // Testing impact + splash damage. Not ignoring targets hit directly by the projectile --> dealing knockback just once (splash)
 
                 // Hp drops to 0 after taking damage
                 if (playerHealth.currentHealth <= 0)
@@ -86,7 +88,6 @@ public class Projectile : MonoBehaviour
 
         // Explosion stats
         ProjectileExplosion explosionScript = explosion.GetComponent<ProjectileExplosion>();
-        //explosionScript.damagePerShot = damagePerShot;
         explosionScript.splashDamage = splashDamage;
         explosionScript.knockbackForce = knockbackForce;
 
@@ -102,6 +103,6 @@ public class Projectile : MonoBehaviour
         //NetworkServer.Spawn(projectile);
 
         // Destroy the explosion after x seconds
-        Destroy(explosion, 0.25f);
+        //Destroy(explosion, 0.25f);
     }
 }

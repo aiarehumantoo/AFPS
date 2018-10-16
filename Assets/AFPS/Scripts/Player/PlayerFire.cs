@@ -22,7 +22,7 @@ public class PlayerFire : NetworkBehaviour
 
     // Stats
     [SyncVar]
-    int damagePerShot = 14;                         // The damage inflicted by each shot.                        lg = 7, rail = 30, plasma = 20, rl = 100
+    int damagePerShot = 14;                         // The damage inflicted by each shot or impact damage for projectiles                        lg = 7, rail = 30, plasma = 20, rl = 100
     [SyncVar]
     float timeBetweenShots = 0.055f;              // The time between each shot.                          lg = 0.055f, rail = 1.5f, plasma = 0.11, rl  = 0.8
     [SyncVar]
@@ -34,13 +34,13 @@ public class PlayerFire : NetworkBehaviour
     // Projectiles
     [SyncVar]
     bool projectile = false;
+    [SyncVar]
+    int splashDamage;                           // Maximum amount of splash damage projectile can deal
     GameObject projectilePrefab;             // Prefab of the projectile
     float spawnDistance = 0.0f;                          // How far from the player projectile should spawn                         // Spawn distance is pointless with projectiles igonring the shooter. Might be needed for better visuals?
     [SyncVar]
     int projectileSpeed = 25;
-    float splashRadius;                                                                                                      // Currently using prefab size for explosion / splash size
-    [SyncVar]
-    int maximumSplashDamage;
+    //float splashRadius;                                                                                                      // Currently using prefab size for explosion / splash size
     float projectileLifeTime = 2.0f;                // For deleting projectiles that hit nothing
 
     public GameObject rocketPrefab;     // Rocket projectile
@@ -280,7 +280,7 @@ public class PlayerFire : NetworkBehaviour
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.damagePerShot = damagePerShot;
         projectileScript.knockbackForce = knockbackForce;
-        projectileScript.splashDamage = maximumSplashDamage;
+        projectileScript.splashDamage = splashDamage;
 
         // Link this script
         projectileScript.parentScript = GetComponent<PlayerFire>();
@@ -290,7 +290,7 @@ public class PlayerFire : NetworkBehaviour
         // Spawn the projectile on the Clients
         NetworkServer.Spawn(projectile);
 
-        // Destroy the projectile after x seconds
+        // Destroy the projectile after x seconds                                   // Should this be on projectile script instead? Destroy on impact or with delay. What happens when this attempts to destroy already destroyed projectile?
         Destroy(projectile, projectileLifeTime);
     }
 
@@ -370,12 +370,12 @@ public class PlayerFire : NetworkBehaviour
 
         if (Input.GetButton("Plasma") && plasma)
         {
-            CmdChangeWeapon("Plasma", 20, 0.11f, 0, false, true, plasmaPrefab, 25, 15);
+            CmdChangeWeapon("Plasma", 5, 0.11f, 0, false, true, plasmaPrefab, 25, 15);     // 5 impact, 15 splash. Previously 20/15, splash ignoring directly hit targets
         }
 
         if (Input.GetButton("RL") && rl)
         {
-            CmdChangeWeapon("RocketLauncher", 100, 0.8f, 0, false, true, rocketPrefab, 25, 100);
+            CmdChangeWeapon("RocketLauncher", 0, 0.8f, 0, false, true, rocketPrefab, 25, 40);  // 0 impact damage, 100 maximum splash. Previously 100/100, splash ignoring directly hit targets
         }
 
         if (Input.GetButton("LG") && lg)
@@ -427,7 +427,7 @@ public class PlayerFire : NetworkBehaviour
 
         projectilePrefab = setProjectilePrefab;
         projectileSpeed = setProjectileSpeed;
-        maximumSplashDamage = splashDmg;
+        splashDamage = splashDmg;
 
 
         // Show correct weapon model

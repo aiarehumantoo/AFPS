@@ -4831,7 +4831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kill: 0
-  damagePerTick: 4
+  damagePerTick: 10
 --- !u!23 &120860096
 MeshRenderer:
   m_ObjectHideFlags: 0
