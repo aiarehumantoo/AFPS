@@ -40,7 +40,8 @@ public class PlayerFire : NetworkBehaviour
     float spawnDistance = 0.0f;                          // How far from the player projectile should spawn                         // Spawn distance is pointless with projectiles igonring the shooter. Might be needed for better visuals?
     [SyncVar]
     int projectileSpeed = 25;
-    //float splashRadius;                                                                                                      // Currently using prefab size for explosion / splash size
+    [SyncVar]
+    float splashRadius;                                                                                                
     float projectileLifeTime = 2.0f;                // For deleting projectiles that hit nothing
 
     public GameObject rocketPrefab;     // Rocket projectile
@@ -109,7 +110,7 @@ public class PlayerFire : NetworkBehaviour
         timer = timeBetweenShots; // Start without cooldown
 
         //Starting weapon (gauntlet) stats
-        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0, 0);
     }
 
     /*
@@ -281,6 +282,7 @@ public class PlayerFire : NetworkBehaviour
         projectileScript.damagePerShot = damagePerShot;
         projectileScript.knockbackForce = knockbackForce;
         projectileScript.splashDamage = splashDamage;
+        projectileScript.splashRadius = splashRadius;
 
         // Link this script
         projectileScript.parentScript = GetComponent<PlayerFire>();
@@ -365,27 +367,27 @@ public class PlayerFire : NetworkBehaviour
         // Input to select this weapon and player has it available
         if (Input.GetButton("Gauntlet") && gauntlet)
         {
-            CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
+            CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0, 0);
         }
 
         if (Input.GetButton("Plasma") && plasma)
         {
-            CmdChangeWeapon("Plasma", 5, 0.11f, 0, false, true, plasmaPrefab, 25, 15);     // 5 impact, 15 splash. Previously 20/15, splash ignoring directly hit targets
+            CmdChangeWeapon("Plasma", 5, 0.11f, 0, false, true, plasmaPrefab, 25, 15, 0.5f);     // 5 impact, 15 splash. Previously 20/15, splash ignoring directly hit targets
         }
 
         if (Input.GetButton("RL") && rl)
         {
-            CmdChangeWeapon("RocketLauncher", 0, 0.8f, 0, false, true, rocketPrefab, 25, 40);  // 0 impact damage, 100 maximum splash. Previously 100/100, splash ignoring directly hit targets
+            CmdChangeWeapon("RocketLauncher", 0, 0.8f, 0, false, true, rocketPrefab, 25, 40, 2);  // 0 impact damage, 100 maximum splash. Previously 100/100, splash ignoring directly hit targets
         }
 
         if (Input.GetButton("LG") && lg)
         {
-            CmdChangeWeapon("LG", 7, 0.055f, 50, true, false, null, 0, 0);
+            CmdChangeWeapon("LG", 7, 0.055f, 50, true, false, null, 0, 0, 0);
         }
 
         if (Input.GetButton("Rail") && rail)
         {
-            CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0);
+            CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0, 0);
         }
     }
 
@@ -414,7 +416,7 @@ public class PlayerFire : NetworkBehaviour
     }
 
     [Command]
-    void CmdChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg)
+    void CmdChangeWeapon(string weapon, int damage, float firerate, float maxRange, bool beam, bool isProjectile, GameObject setProjectilePrefab, int setProjectileSpeed, int splashDmg, float splashRad)
     {
         currentWeapon = weapon;
         useBeam = beam;
@@ -428,6 +430,7 @@ public class PlayerFire : NetworkBehaviour
         projectilePrefab = setProjectilePrefab;
         projectileSpeed = setProjectileSpeed;
         splashDamage = splashDmg;
+        splashRadius = splashRad;
 
 
         // Show correct weapon model
@@ -471,7 +474,7 @@ public class PlayerFire : NetworkBehaviour
     public void CmdRespawn()
     {
         //Starting weapon (gauntlet) stats
-        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
+        CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0, 0);
 
         // Disable other weapons
         plasma = false;

@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public int damagePerShot;
     public int splashDamage;
+    public float splashRadius;
 
     Vector3 knockback;
     public float knockbackForce;
@@ -67,14 +68,20 @@ public class Projectile : MonoBehaviour
             }
 
             // Spawn explosion
-            Explosion(other.gameObject);        // other.transform.root.gameobject if there are other colliders besides root (player)
+            //Explosion(other.gameObject);        // other.transform.root.gameobject if there are other colliders besides root (player)
+
+            // Deal explosion damage
+            ExplosionDamage(transform.position, splashRadius);
         }
 
         // Hits terrain 
         if(other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             // Spawn explosion
-            Explosion(null);
+            //Explosion(null);
+
+            // Deal explosion damage
+            ExplosionDamage(transform.position, splashRadius);
         }
 
         // Destroy projectile
@@ -103,6 +110,54 @@ public class Projectile : MonoBehaviour
         //NetworkServer.Spawn(projectile);
 
         // Destroy the explosion after x seconds
-        //Destroy(explosion, 0.25f);
+        Destroy(explosion, 0.25f);
     }
+
+    void ExplosionDamage(Vector3 center, float radius)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+            // Calculate knockback
+            knockback = (hitColliders[i].transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
+
+            // Calculate splash damage
+            //splashDamage =
+
+            // Deal damage
+            PlayerHealth playerHealth = hitColliders[i].gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                // ... the enemy should take damage.
+                playerHealth.TakeDamage(splashDamage, knockback);
+                //playerHealth.TakeDamage(0, knockback);                      // 0 damage to players, for testin rocket jumps
+
+                if (parentGameObject != hitColliders[i].transform.gameObject) // No hitsounds if self damage
+                {
+                    // Hp drops to 0 after taking damage
+                    if (playerHealth.currentHealth <= 0)
+                    {
+                        parentScript.PlayHitSounds(true);
+                    }
+                    else
+                    {
+                        parentScript.PlayHitSounds(false);
+                    }
+                }
+
+            }
+            i++;
+        }
+    }
+
+    /*
+    //Display overlapsphere
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        //Use the same vars you use to draw your Overlap SPhere to draw your Wire Sphere.
+        Gizmos.DrawWireSphere(transform.position, splashRadius);
+    }
+    */
 }
