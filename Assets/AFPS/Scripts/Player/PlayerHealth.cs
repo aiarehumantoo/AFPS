@@ -79,10 +79,8 @@ public class PlayerHealth : NetworkBehaviour
         playerFire = GetComponent<PlayerFire>();
 
         // Health at spawn
-        //currentHealth = startingHealth;
-        //currentArmor = startingArmor;
-        currentArmor = 0;                           //TESTING
-        currentHealth = 100;
+        currentHealth = startingHealth;
+        currentArmor = startingArmor;
         isDead = false;
     }
 
@@ -114,7 +112,6 @@ public class PlayerHealth : NetworkBehaviour
             return;
         }
 
-        /*                                                              disabled armor for testing purposes. health taking dmg directly
         // if player has enough armor
         if(currentArmor >= amount / armorDamageReduction)
         {
@@ -130,7 +127,6 @@ public class PlayerHealth : NetworkBehaviour
             // Armor left drops to zero
             currentArmor = 0;
         }
-        */
 
         // Reduce the current health by the amount of damage sustained.
         currentHealth -= amount;

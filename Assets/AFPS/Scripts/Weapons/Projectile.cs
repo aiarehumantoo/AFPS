@@ -119,33 +119,39 @@ public class Projectile : MonoBehaviour
         int i = 0;
         while (i < hitColliders.Length)
         {
-            // Calculate knockback
-            knockback = (hitColliders[i].transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
-
-            // Calculate splash damage
-            //splashDamage =
-
-            // Deal damage
-            PlayerHealth playerHealth = hitColliders[i].gameObject.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
+            // Hits CapsuleCollider of player. (Otherwise CharacterController would count as hit too, resulting in double damage)
+            if (hitColliders[i].tag == "Player" && hitColliders[i] is CapsuleCollider)
             {
-                // ... the enemy should take damage.
-                playerHealth.TakeDamage(splashDamage, knockback);
-                //playerHealth.TakeDamage(0, knockback);                      // 0 damage to players, for testin rocket jumps
+                // Add line of sight check? (Raycast to all targets)                splash ignoring map geometry could work too. Remember to ignore players in line of sight check.
 
-                if (parentGameObject != hitColliders[i].transform.gameObject) // No hitsounds if self damage
+                // Calculate knockback
+                knockback = (hitColliders[i].transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
+
+                // Calculate splash damage
+                //splashDamage =
+
+                // Deal damage
+                PlayerHealth playerHealth = hitColliders[i].gameObject.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
                 {
-                    // Hp drops to 0 after taking damage
-                    if (playerHealth.currentHealth <= 0)
-                    {
-                        parentScript.PlayHitSounds(true);
-                    }
-                    else
-                    {
-                        parentScript.PlayHitSounds(false);
-                    }
-                }
+                    // ... the enemy should take damage.
+                    playerHealth.TakeDamage(splashDamage, knockback);
+                    //playerHealth.TakeDamage(0, knockback);                      // 0 damage to players, for testin rocket jumps
 
+                    if (parentGameObject != hitColliders[i].transform.gameObject) // No hitsounds if self damage
+                    {
+                        // Hp drops to 0 after taking damage
+                        if (playerHealth.currentHealth <= 0)
+                        {
+                            parentScript.PlayHitSounds(true);
+                        }
+                        else
+                        {
+                            parentScript.PlayHitSounds(false);
+                        }
+                    }
+
+                }
             }
             i++;
         }

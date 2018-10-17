@@ -305,14 +305,17 @@ public class PlayerFire : NetworkBehaviour
         // Perform the raycast against gameobjects on the shootable layer and if it hits something...
         if (Physics.Raycast(shootRay, out shootHit, range, shootableMask))
         {
+            // Hits CapsuleCollider of player
+            if (shootHit.collider.tag == "Player" && shootHit.collider is CapsuleCollider)
+            {
+                CmdHitDummy();     // For testing
 
-            CmdHitDummy();     // For testing
+                // Deal damage
+                CmdHitPlayer();
 
-            // Deal damage
-            CmdHitPlayer();
-            
-            // Impact effect
-            //Impact();
+                // Impact effect
+                //Impact();
+            }
 
         }
     }
@@ -341,18 +344,6 @@ public class PlayerFire : NetworkBehaviour
                 PlayHitSounds(false);
             }
         }
-
-        /*
-        //test
-        PlayerMovement playerMovement = shootHit.collider.GetComponent<PlayerMovement>();
-        if (playerMovement != null)
-        {
-            // Calculate knockback
-            knockback = camera.transform.forward.normalized * knockbackForce;
-
-            playerMovement.KnockBack(knockback);
-        }
-        */
     }
 
 
@@ -377,7 +368,7 @@ public class PlayerFire : NetworkBehaviour
 
         if (Input.GetButton("RL") && rl)
         {
-            CmdChangeWeapon("RocketLauncher", 0, 0.8f, 0, false, true, rocketPrefab, 25, 40, 2);  // 0 impact damage, 100 maximum splash. Previously 100/100, splash ignoring directly hit targets
+            CmdChangeWeapon("RocketLauncher", 50, 0.8f, 0, false, true, rocketPrefab, 25, 50, 2);  // 50 impact damage, 50 maximum splash. Previously 100/100, splash ignoring directly hit targets
         }
 
         if (Input.GetButton("LG") && lg)
