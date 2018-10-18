@@ -78,6 +78,8 @@ public class PlayerFire : NetworkBehaviour
     void Start()
     //public override void OnStartLocalPlayer()
     {
+        RegisterPlayer();   // Gives each player a unique id.
+
         //get camera
         camera = transform.GetChild(0);
 
@@ -92,7 +94,7 @@ public class PlayerFire : NetworkBehaviour
             return;
         }
 
-        gameObject.name = "Local Player";
+        //gameObject.name = "Local Player";
 
         //Set layer of local player to "Player" (Layer 9) instead of "Enemy" layer              // Stops host from taking damage? But this should apply only to local player and not enemies?
         //gameObject.layer = 9;
@@ -113,6 +115,12 @@ public class PlayerFire : NetworkBehaviour
         CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0, 0);
     }
 
+    void RegisterPlayer()
+    {
+        string _ID = "Player " + GetComponent<NetworkIdentity>().netId;
+        transform.name = _ID;
+    }
+
     /*
     // Called when string currentWeapon changes                         TESTING
     void OnWeaponChange(string currentWeapon)
@@ -122,7 +130,7 @@ public class PlayerFire : NetworkBehaviour
     */
 
     /*
-    void OnPlayerConnected(NetworkPlayer player)                                // Not called?
+    void OnPlayerConnected(NetworkPlayer player)                                // Not called? is from older unity networking?
     {
         Debug.Log("new player connected");
 
@@ -308,10 +316,13 @@ public class PlayerFire : NetworkBehaviour
             // Hits CapsuleCollider of player
             if (shootHit.collider.tag == "Player" && shootHit.collider is CapsuleCollider)
             {
-                CmdHitDummy();     // For testing
+                // Calculate knockback
+                knockback = camera.transform.forward.normalized * knockbackForce;
 
                 // Deal damage
-                CmdHitPlayer();
+                //CmdHitDummy(shootHit.collider, damagePerShot, knockback);     // Target dummy for testing
+                //CmdHitPlayer(shootHit.collider, damagePerShot, knockback);
+                CmdHitPlayer(shootHit.collider.name, damagePerShot, knockback);
 
                 // Impact effect
                 //Impact();
@@ -320,18 +331,19 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
+    //[Command] functions will only accept primitive parameters (like int,float,).You cannot pass a GameObject from a client to server(or host) like that.
+    //Store the gameobject in server.Pass a unique number id for that gameobject so it can be instantiated in server.
     [Command]
-    void CmdHitPlayer()
+    //void CmdHitPlayer(Collider other, int dmg, Vector3 force)
+    void CmdHitPlayer(string _ID, int dmg, Vector3 force)
     {
         // If the Health component exists...
-        PlayerHealth playerHealth = shootHit.collider.GetComponent<PlayerHealth>();
+        //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+        PlayerHealth playerHealth = GameObject.Find(_ID).GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
-            // Calculate knockback
-            knockback = camera.transform.forward.normalized * knockbackForce;
-
             // ... the enemy should take damage.
-            playerHealth.TakeDamage(damagePerShot, knockback);
+            playerHealth.TakeDamage(dmg, force);
 
             // Hp drops to 0 after taking damage
             if (playerHealth.currentHealth <= 0)
@@ -341,11 +353,11 @@ public class PlayerFire : NetworkBehaviour
             }
             else
             {
+                // Normal hitsounds
                 PlayHitSounds(false);
             }
         }
     }
-
 
     // Woops. can "change" to already selected weapon. Will be problem later on with animations and whatnot         <-- FIX
     void SelectWeapon()
@@ -381,24 +393,6 @@ public class PlayerFire : NetworkBehaviour
             CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0, 0);
         }
     }
-
-    /*
-    // Quick fix for syncing weapon states when new player joins
-    [Command]
-    void CmdSyncWeapon(string currentWeapon)
-    {
-        if(currentWeapon == "Gauntlet")
-            CmdChangeWeapon("Gauntlet", 14, 0.055f, 2, false, false, null, 0, 0);
-        if (currentWeapon == "Plasma")
-            CmdChangeWeapon("Plasma", 20, 0.11f, 0, false, true, plasmaPrefab, 25, 15);
-        if (currentWeapon == "RL")
-            CmdChangeWeapon("RocketLauncher", 100, 0.8f, 0, false, true, rocketPrefab, 25, 100);
-        if (currentWeapon == "LG")
-            CmdChangeWeapon("LG", 7, 0.055f, 50, true, false, null, 0, 0);
-        if (currentWeapon == "Rail")
-            CmdChangeWeapon("Rail", 90, 1.5f, 50, true, false, null, 0, 0);
-    }
-    */
 
     [Command]
     void CmdSyncWeaponModel(string weapon)
@@ -508,18 +502,15 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
+    /*
     [Command]
-    void CmdHitDummy()
+    void CmdHitDummy(Collider other, int dmg, Vector3 force)
     {
-        // Try and find an Health script on the gameobject hit.
-        TargetDummy targetDummy = shootHit.collider.GetComponent<TargetDummy>();
+        TargetDummy targetDummy = other.gameObject.GetComponent<TargetDummy>();         // Target dummy for testing
         if (targetDummy != null)
         {
-            // Calculate knockback
-            knockback = camera.transform.forward.normalized * knockbackForce;
-
-            // ... the enemy should take damage.
-            targetDummy.TakeDamage(damagePerShot, knockback);
+            // Deal damage
+            targetDummy.TakeDamage(dmg, force);
 
             // Hp drops to 0 after taking damage
             if (targetDummy.currentHealth <= 0)
@@ -532,4 +523,5 @@ public class PlayerFire : NetworkBehaviour
             }
         }
     }
+    */
 }

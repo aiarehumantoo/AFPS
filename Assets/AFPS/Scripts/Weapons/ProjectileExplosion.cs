@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Not used anymore. using overlapsphere in projectile.cs instead
+
 public class ProjectileExplosion : MonoBehaviour
 {
     public int splashDamage;
