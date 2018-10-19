@@ -78,7 +78,7 @@ public class PlayerFire : NetworkBehaviour
     void Start()
     //public override void OnStartLocalPlayer()
     {
-        RegisterPlayer();   // Gives each player a unique id.
+        RegisterPlayer();   // Give each player a unique id.
 
         //get camera
         camera = transform.GetChild(0);

@@ -10698,6 +10698,34 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!1 &490547450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 490547451}
+  m_Layer: 0
+  m_Name: Spawn Position 2 (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &490547451
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 490547450}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4, y: 6, z: -45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2112118119}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &506593908
 GameObject:
   m_ObjectHideFlags: 0
@@ -38889,10 +38917,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1643565418499060, guid: b3161baee8d08c94887d3a5935016ef9,
     type: 2}
-  numberOfEnemies: 2
+  numberOfEnemies: 3
   spawnPos:
   - {fileID: 465737997}
   - {fileID: 985964248}
+  - {fileID: 490547450}
 --- !u!114 &2112118118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38937,6 +38966,7 @@ Transform:
   m_Children:
   - {fileID: 465737998}
   - {fileID: 985964249}
+  - {fileID: 490547451}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

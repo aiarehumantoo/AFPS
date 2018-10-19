@@ -37,14 +37,14 @@ public class Projectile : MonoBehaviour
             HitPlayer(other, damagePerShot, knockback); // Player, dealing projectile impact damage without any knockback
 
             // Deal explosion damage
-            ExplosionDamage(transform.position, splashRadius, true);
+            ExplosionDamage(transform.position, splashRadius, other);
         }
 
         // Hits terrain 
         if(other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             // Deal explosion damage
-            ExplosionDamage(transform.position, splashRadius, false);
+            ExplosionDamage(transform.position, splashRadius, null);
         }
 
         // Destroy projectile
@@ -52,7 +52,7 @@ public class Projectile : MonoBehaviour
         transform.GetComponent<Rigidbody>().velocity = Vector3.zero; // stopping projectile instead of destroying it. for debugging. projectile is destroyed anyway when its lifetime expires
     }
 
-    void ExplosionDamage(Vector3 center, float radius, bool directHit)
+    void ExplosionDamage(Vector3 center, float radius, Collider other)
     {
         debugSplash = true;     // Debug, display explosion radius
 
@@ -64,13 +64,14 @@ public class Projectile : MonoBehaviour
             {
                 // Add line of sight check? (Raycast to all targets)                splash ignoring map geometry could work too. Remember to ignore players in line of sight check.
 
-                // Calculate splash knockback. No splash knockback if it was direct hit
-                if (directHit)
+                if (other == hitColliders[i])   // direct hit, no additional knockback from splash
                 {
+                    Debug.Log("direct splash");
                     knockback = Vector3.zero;
                 }
                 else
                 {
+                    Debug.Log("normal splash");
                     knockback = (hitColliders[i].transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
                 }
 
