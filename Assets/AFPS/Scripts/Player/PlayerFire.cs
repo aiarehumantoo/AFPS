@@ -331,8 +331,8 @@ public class PlayerFire : NetworkBehaviour
         }
     }
 
-    //[Command] functions will only accept primitive parameters (like int,float,).You cannot pass a GameObject from a client to server(or host) like that.
-    //Store the gameobject in server.Pass a unique number id for that gameobject so it can be instantiated in server.
+    // [Command] functions will only accept primitive parameters (like int,float,).You cannot pass a GameObject from a client to server(or host) like that.
+    // Store the gameobject in server.Pass a unique number id for that gameobject so it can be instantiated in server.
     [Command]
     //void CmdHitPlayer(Collider other, int dmg, Vector3 force)
     void CmdHitPlayer(string _ID, int dmg, Vector3 force)
@@ -349,12 +349,12 @@ public class PlayerFire : NetworkBehaviour
             if (playerHealth.currentHealth <= 0)
             {
                 // Last hit
-                PlayHitSounds(true);
+                RpcPlayHitSounds(true);
             }
             else
             {
                 // Normal hitsounds
-                PlayHitSounds(false);
+                RpcPlayHitSounds(false);
             }
         }
     }
@@ -436,11 +436,12 @@ public class PlayerFire : NetworkBehaviour
 
     }
 
-    public void PlayHitSounds(bool kill)
+    [ClientRpc]
+    public void RpcPlayHitSounds(bool kill)
     {
         if (!isLocalPlayer)
         {
-            //return;
+            return;
         }
 
         if (kill) //killshot

@@ -23,6 +23,7 @@ public class Projectile : MonoBehaviour
         // Ignore player that shot the projectile
         if (parentGameObject == other.gameObject)
         {
+            Debug.Log("projectile hit shooter");
             return;
         }
 
@@ -33,8 +34,8 @@ public class Projectile : MonoBehaviour
             knockback = transform.forward.normalized * knockbackForce;  // Direction projectile is moving * force                                      
 
             // Deal damage, zero knockback on direct hit. Adding knockback only in splash.
-            HitDummy(other, damagePerShot, knockback); // Dummy
-            HitPlayer(other, damagePerShot, knockback); // Player, dealing projectile impact damage without any knockback
+            //HitDummy(other, damagePerShot, knockback); // Dummy
+            HitPlayer(other.name, damagePerShot, knockback); // Player, dealing projectile impact damage without any knockback
 
             // Deal explosion damage
             ExplosionDamage(transform.position, splashRadius, other);
@@ -79,31 +80,37 @@ public class Projectile : MonoBehaviour
                 //splashDamage =
 
                 // Deal damage
-                HitDummy(hitColliders[i], splashDamage, knockback);
-                HitPlayer(hitColliders[i], splashDamage, knockback);
+                //HitDummy(hitColliders[i], splashDamage, knockback);
+                HitPlayer(hitColliders[i].name, splashDamage, knockback);
             }
         }
     }   
 
-    void HitPlayer(Collider other, int dmg, Vector3 force)
+    //void HitPlayer(Collider other, int dmg, Vector3 force)
+    void HitPlayer(string _ID, int dmg, Vector3 force)
     {
         // If the Health component exists...
-        PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
+        //PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
+        PlayerHealth playerHealth = GameObject.Find(_ID).GetComponent<PlayerHealth>();
+        PlayerFire playerFire = GameObject.Find(_ID).GetComponent<PlayerFire>();
         if (playerHealth != null)
         {
             // Deal damage
             playerHealth.TakeDamage(dmg, force);
 
-            if (parentGameObject != other.transform.gameObject) // No hitsounds if self damage
+            //if (parentGameObject != other.transform.gameObject) // No hitsounds if self damage
+            if (parentGameObject != GameObject.Find(_ID).transform.gameObject)
             {
                 // Hp drops to 0 after taking damage
                 if (playerHealth.currentHealth <= 0)
                 {
-                    parentScript.PlayHitSounds(true);
+                    //parentScript.PlayHitSounds(true);
+                    //playerFire.PlayHitSounds(true);
                 }
                 else
                 {
-                    parentScript.PlayHitSounds(false);
+                    //parentScript.PlayHitSounds(false);
+                    //playerFire.PlayHitSounds(false);
                 }
             }
         }
@@ -119,6 +126,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    /*
     void HitDummy(Collider other, int dmg, Vector3 force)
     {
         TargetDummy targetDummy = other.gameObject.GetComponent<TargetDummy>();         // Target dummy for testing
@@ -138,6 +146,7 @@ public class Projectile : MonoBehaviour
             }
         }
     }
+    */
 
     // old way of creating explosion. spawns sphere and collider of that sphere is used for hit detection
     void Explosion(GameObject direct)

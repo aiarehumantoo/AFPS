@@ -47,11 +47,11 @@ public class ProjectileExplosion : MonoBehaviour
                 // Hp drops to 0 after taking damage
                 if (targetDummy.currentHealth <= 0)
                 {
-                    parentScript.PlayHitSounds(true);
+                    //parentScript.PlayHitSounds(true);
                 }
                 else
                 {
-                    parentScript.PlayHitSounds(false);
+                    //parentScript.PlayHitSounds(false);
                 }
             }
 
@@ -67,11 +67,11 @@ public class ProjectileExplosion : MonoBehaviour
                     // Hp drops to 0 after taking damage
                     if (playerHealth.currentHealth <= 0)
                     {
-                        parentScript.PlayHitSounds(true);
+                        //parentScript.PlayHitSounds(true);
                     }
                     else
                     {
-                        parentScript.PlayHitSounds(false);
+                        //parentScript.PlayHitSounds(false);
                     }
                 }
 

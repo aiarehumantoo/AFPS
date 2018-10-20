@@ -97,6 +97,17 @@ public class PlayerHealth : NetworkBehaviour
         StackDecay();
     }
 
+    [ClientRpc]
+    void RpcApplyKnockBack(Vector3 _knockback)
+    {
+        // Apply knockback
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.KnockBack(_knockback);    // Doing knockback in movement code
+        }
+    }
+
     public void TakeDamage(int amount, Vector3 knockback)
     {
         // Damage only applied on the server
@@ -131,12 +142,7 @@ public class PlayerHealth : NetworkBehaviour
         // Reduce the current health by the amount of damage sustained.
         currentHealth -= amount;
 
-        // Apply knockback
-        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
-        if (playerMovement != null)
-        {
-            playerMovement.KnockBack(knockback);    // Doing knockback in movement code
-        }
+        RpcApplyKnockBack(knockback);
 
         // If the current health is less than or equal to zero...
         if (currentHealth <= 0)
