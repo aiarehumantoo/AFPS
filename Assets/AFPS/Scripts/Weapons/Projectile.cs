@@ -19,25 +19,15 @@ public class Projectile : NetworkBehaviour
     [SyncVar]
     public string shooterID;
 
-    bool dealtDamage;
-
     bool debugSplash;   // For displaying explosion/splash radius in debug mode (enable gizmos)
 
     private void Start()
     {
-        dealtDamage = false;
         transform.name = "Projectile of " + shooterID;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if(dealtDamage)
-        {
-            // Projectiles seem to deal impact damage twice? Problem with collider or just OnTriggerEnter triggered twice before projectile is deleted?
-            Debug.Log("Double hit, ignoring");
-            return;
-        }
-
         // Ignore player that shot the projectile                                       // With networking and [SyncVar] client side projectiles work as expected (since required variables reach clients). However Unity documentation said something about networking only player controlled objects. or was it just about sending [Command]`s?
         //if (parentGameObject == other.gameObject)
         if (shooterID == other.gameObject.name)                                         // !!!Projectile stats are passed only to server, not clients. Thats why client side projectile is not working properly!!!
@@ -72,30 +62,30 @@ public class Projectile : NetworkBehaviour
         // Destroy projectile
         Destroy(gameObject);
         //transform.GetComponent<Rigidbody>().velocity = Vector3.zero; // stopping projectile instead of destroying it. for debugging. projectile is destroyed anyway when its lifetime expires
-
-        dealtDamage = true;
     }
 
     void ExplosionDamage(Vector3 center, float radius, Collider other)
     {
+        // Player has two colliders (normal + trigger, maybe leftovers from old versions?) and splash hits both. Check if target has already received dmg? For now ignoring triggers.           // Multiple colliders? Might be the case at some point.
+
         debugSplash = true;     // Debug, display explosion radius
 
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);    // Get colliders within splash radius
         for(int i = 0; i < hitColliders.Length; i++)    // Repeat for every hit collider
         {
             // Hits CapsuleCollider of player. (Otherwise CharacterController would count as hit too, resulting in double damage)
-            if (hitColliders[i].tag == "Player" && hitColliders[i] is CapsuleCollider)
+            if (hitColliders[i].tag == "Player" && hitColliders[i] is CapsuleCollider && !hitColliders[i].isTrigger)
             {
                 // Add line of sight check? (Raycast to all targets)                splash ignoring map geometry could work too. Remember to ignore players in line of sight check.
 
                 if (other == hitColliders[i])   // direct hit, no additional knockback from splash
                 {
-                    Debug.Log("no splash knockback");
+                    //Debug.Log("no splash knockback");
                     knockback = Vector3.zero;
                 }
                 else
                 {
-                    Debug.Log("normal splash knockback");
+                    //Debug.Log("normal splash knockback");
                     knockback = (hitColliders[i].transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
                 }
 
