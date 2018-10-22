@@ -328,6 +328,7 @@
     <Compile Include="Assets\AFPS\Scripts\testing\rail.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\RocketTest.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\Rotate.cs" />
+    <Compile Include="Assets\AFPS\Scripts\testing\SetHP.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\Shoot.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\Spawn.cs" />
     <Compile Include="Assets\AFPS\Scripts\testing\TargetDummy.cs" />

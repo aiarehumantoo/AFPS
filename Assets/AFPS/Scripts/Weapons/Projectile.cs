@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Projectile : MonoBehaviour
+public class Projectile : NetworkBehaviour
 {
-    public int damagePerShot;
+    public int damagePerShot;       // Damage stats do not need syncing since damage is server side anyway?
     public int splashDamage;
     public float splashRadius;
 
@@ -15,17 +16,37 @@ public class Projectile : MonoBehaviour
     public GameObject parentGameObject;
 
     public GameObject explosionPrefab;
+    [SyncVar]
+    public string shooterID;
+
+    bool dealtDamage;
 
     bool debugSplash;   // For displaying explosion/splash radius in debug mode (enable gizmos)
 
+    private void Start()
+    {
+        dealtDamage = false;
+        transform.name = "Projectile of " + shooterID;
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        // Ignore player that shot the projectile
-        if (parentGameObject == other.gameObject)
+        if(dealtDamage)
         {
+            // Projectiles seem to deal impact damage twice? Problem with collider or just OnTriggerEnter triggered twice before projectile is deleted?
+            Debug.Log("Double hit, ignoring");
+            return;
+        }
+
+        // Ignore player that shot the projectile                                       // With networking and [SyncVar] client side projectiles work as expected (since required variables reach clients). However Unity documentation said something about networking only player controlled objects. or was it just about sending [Command]`s?
+        //if (parentGameObject == other.gameObject)
+        if (shooterID == other.gameObject.name)                                         // !!!Projectile stats are passed only to server, not clients. Thats why client side projectile is not working properly!!!
+        {                                                                               // without [Command] stats are passed on client properly but server isnt getting updated
             Debug.Log("projectile hit shooter");
             return;
         }
+
+        // Skip calculations on clients? Damage is deal on the server
 
         // Direct hit on player collider
         if (other.tag == "Player" && other is CapsuleCollider)
@@ -49,8 +70,10 @@ public class Projectile : MonoBehaviour
         }
 
         // Destroy projectile
-        //Destroy(gameObject);
-        transform.GetComponent<Rigidbody>().velocity = Vector3.zero; // stopping projectile instead of destroying it. for debugging. projectile is destroyed anyway when its lifetime expires
+        Destroy(gameObject);
+        //transform.GetComponent<Rigidbody>().velocity = Vector3.zero; // stopping projectile instead of destroying it. for debugging. projectile is destroyed anyway when its lifetime expires
+
+        dealtDamage = true;
     }
 
     void ExplosionDamage(Vector3 center, float radius, Collider other)
@@ -67,12 +90,12 @@ public class Projectile : MonoBehaviour
 
                 if (other == hitColliders[i])   // direct hit, no additional knockback from splash
                 {
-                    Debug.Log("direct splash");
+                    Debug.Log("no splash knockback");
                     knockback = Vector3.zero;
                 }
                 else
                 {
-                    Debug.Log("normal splash");
+                    Debug.Log("normal splash knockback");
                     knockback = (hitColliders[i].transform.position - transform.position).normalized * knockbackForce;           // Reduce knockback if further away?
                 }
 
@@ -105,12 +128,12 @@ public class Projectile : MonoBehaviour
                 if (playerHealth.currentHealth <= 0)
                 {
                     //parentScript.PlayHitSounds(true);
-                    //playerFire.PlayHitSounds(true);
+                    //playerFire.RpcPlayHitSounds(true);    //Cant call RPC on a client
                 }
                 else
                 {
                     //parentScript.PlayHitSounds(false);
-                    //playerFire.PlayHitSounds(false);
+                    //playerFire.RpcPlayHitSounds(false);
                 }
             }
         }

@@ -29,7 +29,7 @@ public class PlayerFire : NetworkBehaviour
     float range = 2;                             // The distance the gun can fire.
     Vector3 knockback;
     [SyncVar]
-    float knockbackForce = 5f;
+    float knockbackForce = 6f;
 
     // Projectiles
     [SyncVar]
@@ -296,6 +296,7 @@ public class PlayerFire : NetworkBehaviour
         projectileScript.parentScript = GetComponent<PlayerFire>();
         // Link player gameobject
         projectileScript.parentGameObject = transform.gameObject;
+        projectileScript.shooterID = transform.gameObject.name;   // Link ID (player name) instead
 
         // Spawn the projectile on the Clients
         NetworkServer.Spawn(projectile);
