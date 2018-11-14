@@ -300,6 +300,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AFPS\Networking.cs" />
     <Compile Include="Assets\AFPS\ReadME.cs" />
     <Compile Include="Assets\AFPS\Scripts\Crosshair.cs" />
     <Compile Include="Assets\AFPS\Scripts\ItemPickup.cs" />

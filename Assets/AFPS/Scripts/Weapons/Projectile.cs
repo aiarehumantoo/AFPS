@@ -36,7 +36,7 @@ public class Projectile : NetworkBehaviour
             return;
         }
 
-        // Skip calculations on clients? Damage is deal on the server
+        // Skip calculations on clients? Damage is dealt on the server
 
         // Direct hit on player collider
         if (other.tag == "Player" && other is CapsuleCollider)
