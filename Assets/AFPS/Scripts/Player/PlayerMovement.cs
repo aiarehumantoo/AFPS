@@ -7,6 +7,16 @@ using UnityEngine.Networking;   // Networking namespace
 // https://github.com/Zinglish/quake3-movement-unity3d/blob/master/CPMPlayer.js
 
 
+    /*TODO:
+     * 
+     * Fixed player stuttering between air and ground. clean up now unnecessary workarounds. (sounds etc.)
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+
 
 // Contains the command the user wishes upon the character
 struct Inputs
@@ -64,15 +74,15 @@ public class PlayerMovement : NetworkBehaviour
     #region MovementVariables
     //Variables for movement
 
-    float moveSpeed = 7.0f;                // Ground move speed
-    float runAcceleration = 10.0f;         // Ground accel
-    float runDeacceleration = 6.0f;       // Deacceleration that occurs when running on the ground
-    float airAcceleration = 0.1f;          // Air accel
-    float airDecceleration = 0.1f;         // Deacceleration experienced when ooposite strafing
-    float airControl = 0.3f;               // How precise air control is
-    float sideStrafeAcceleration = 100.0f;  // How fast acceleration occurs to get up to sideStrafeSpeed when
-    float sideStrafeSpeed = 1.0f;          // What the max speed to generate when side strafing
-    float jumpSpeed = 7.0f;                // The speed at which the character's up axis gains when hitting jump
+    float moveSpeed = 7.0f;                     // Ground move speed
+    float runAcceleration = 14.0f; //10         // Ground accel
+    float runDeacceleration = 10.0f; //6       // Deacceleration that occurs when running on the ground
+    float airAcceleration = 2.0f; //0.1          // Air accel
+    float airDecceleration = 2.0f; //0.1         // Deacceleration experienced when ooposite strafing
+    float airControl = 0.3f;                    // How precise air control is
+    float sideStrafeAcceleration = 50.0f; //100  // How fast acceleration occurs to get up to sideStrafeSpeed when
+    float sideStrafeSpeed = 1.0f;               // What the max speed to generate when side strafing
+    float jumpSpeed = 8.0f; //7                // The speed at which the character's up axis gains when hitting jump
     float moveScale = 1.0f;
 
     bool m_PreviouslyGrounded = true;
@@ -246,7 +256,11 @@ public class PlayerMovement : NetworkBehaviour
         else
             ApplyFriction(0);
 
-        float scale = InputScale();
+        //with scaling
+        //float scale = InputScale();
+
+        //without scaling
+        SetMovementDir();
 
         wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
         wishdir = transform.TransformDirection(wishdir);
@@ -258,8 +272,8 @@ public class PlayerMovement : NetworkBehaviour
 
         Accelerate(wishdir, wishspeed, runAcceleration);
 
-        // Reset the gravity velocity
-        playerVelocity.y = 0f;
+        // Reset the gravity velocity           
+        playerVelocity.y = -gravity * Time.deltaTime;
 
         if (wishJump)
         {
@@ -290,8 +304,11 @@ public class PlayerMovement : NetworkBehaviour
         float wishvel = airAcceleration;
         float accel;
 
-        float scale = InputScale();
+        //with scaling
+        //float scale = InputScale();
+        //SetMovementDir();
 
+        //without scaling
         SetMovementDir();
 
         wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
@@ -302,7 +319,9 @@ public class PlayerMovement : NetworkBehaviour
 
         wishdir.Normalize();
         moveDirectionNorm = wishdir;
-        wishspeed *= scale;
+
+        //with scaling
+        //wishspeed *= scale;
 
         // CPM: Aircontrol
         float wishspeed2 = wishspeed;

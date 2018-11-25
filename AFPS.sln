@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AFPS", "AFPS.csproj", "{F917FF65-0F6F-5B07-5ADE-05D61E94FE80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AFPS.Editor", "AFPS.Editor.csproj", "{D4BD3838-E772-FF08-1A82-C3277F2A0AAE}"
