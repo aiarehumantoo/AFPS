@@ -29,7 +29,7 @@ public class PlayerFire : NetworkBehaviour
     float range = 2;                             // The distance the gun can fire.
     Vector3 knockback;
     [SyncVar]
-    float knockbackForce = 6f;
+    float knockbackForce = 10.0f;
 
     // Projectiles
     [SyncVar]
