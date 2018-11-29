@@ -36,19 +36,33 @@ public class Debugger : NetworkBehaviour
         GUI.Label(new Rect(10, 180, 400, 100), "Vertical Speed: " + ups2.y + "ups", style);
     }
 
+    /*player trigger is disabled atm
     void OnTriggerEnter(Collider collider)
     {
+        
         if (collider.tag != "Untagged" && collider.tag != "Player")
         {
-            touching = collider.tag;
+            //touching = collider.tag;
         }
-    }
+        
 
+        touching = collider.tag;
+    }
+    */
+
+    /*
     void OnTriggerExit(Collider collider)
     {
         if (collider.tag != "Untagged")
         {
             touching = "Null";
         }
+    }
+    */
+
+    // Get tag of the object charactercontroller is touching
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        touching = hit.collider.tag;
     }
 }

@@ -112,9 +112,17 @@ public class PlayerMovement : NetworkBehaviour
     private CharacterController _controller;
 
 
-    // TESTING
-    //bool surfing;
 
+
+
+
+    // TESTING
+    private bool isSurfing = false; // is on a slope or not
+    public float slideFriction = 0.3f; // ajusting the friction of the slope
+    private Vector3 hitNormal; //orientation of the slope.
+    float speed = 1f;
+
+    float slideSpeed = 6f;
 
     // OnControllerColliderHit is called when the controller hits a collider while performing a Move.
     // This can be used to push objects when they collide with the character.
@@ -123,7 +131,28 @@ public class PlayerMovement : NetworkBehaviour
         // Print object name
         Debug.Log("Standing on: " + hit.collider.tag);
 
+        // Get ground normal
+        hitNormal = hit.normal;
     }
+
+    void SurfMove()
+    {
+        // Sliding on slopes
+        if (isSurfing)          //unncessary, already in update()
+        {
+            playerVelocity.x += (1f - hitNormal.y) * hitNormal.x * (speed - slideFriction);
+            playerVelocity.z += (1f - hitNormal.y) * hitNormal.z * (speed - slideFriction);
+        }
+
+        // + aircontrol from airmove()
+        // or just sliding on a slope + airmove when not touching it
+        // or airmove() + add sliding calculations to end of it if player is touching a slope
+    }
+
+
+
+
+
 
     private void Start()
     {
@@ -150,13 +179,12 @@ public class PlayerMovement : NetworkBehaviour
         Settings();
     }
 
-    private void Update()
+    private void Update()           // Unity documentation recommends calling charactercontroller.move only once per frame -> void Update() but FixedUpdate() is not linked to framerate
     {
         if (!isLocalPlayer)
         {
             return;
         }
-
 
         #region MouseControls
 
@@ -204,7 +232,11 @@ public class PlayerMovement : NetworkBehaviour
             m_PreviouslyGrounded = false;
         }
 
-        if (_controller.isGrounded)
+        if (isSurfing)
+        {
+            SurfMove();
+        }
+        else if (_controller.isGrounded)
         {
             GroundMove();
 
@@ -230,6 +262,16 @@ public class PlayerMovement : NetworkBehaviour
 
         // Move the controller
         _controller.Move(playerVelocity * Time.deltaTime);
+
+        if (_controller.isGrounded) //ground
+        {
+            // On a slope, angle of ground normal
+            isSurfing = Vector3.Angle(Vector3.up, hitNormal) >= _controller.slopeLimit;     // or use float slopeLimit instead of value set in charactercontroller
+        }
+        else //air
+        {
+            isSurfing = false;
+        }
 
         //Need to move the camera after the player has been moved because otherwise the camera will clip the player if going fast enough and will always be 1 frame behind.
         // Set the camera's position to the transform
