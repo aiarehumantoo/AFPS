@@ -3,19 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;   // Networking namespace
 
-// Original Quake 3 port;
+// Quake 3 arena
+// https://github.com/id-Software/Quake-III-Arena/blob/master/code/game/bg_pmove.c
+
+// CPM dev diary
+// http://games.linuxdude.com/tamaps/archive/cpm1_dev_docs/
+
+// Original Quake 3 physics port;
 // https://github.com/Zinglish/quake3-movement-unity3d/blob/master/CPMPlayer.js
 
 
-    /*TODO:
-     * 
-     * Fixed player stuttering between air and ground. clean up now unnecessary workarounds. (sounds etc.)
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
+/*TODO:
+ * 
+ * Fixed player stuttering between air and ground. clean up now unnecessary workarounds. (sounds etc.)
+ * 
+ * Surfing:
+ *      when touching ramp, 0 gravity, higher aircontrol airmove()
+ *      might need to write source style physics to get rid of w+a/d strafing when surfing
+ * 
+ * 
+ */
+
+
+// Notes:
+// To fix playspeed bug, just open Edit>Project settings>Time.
 
 
 // Contains the command the user wishes upon the character
@@ -100,6 +111,20 @@ public class PlayerMovement : NetworkBehaviour
 
     private CharacterController _controller;
 
+
+    // TESTING
+    //bool surfing;
+
+
+    // OnControllerColliderHit is called when the controller hits a collider while performing a Move.
+    // This can be used to push objects when they collide with the character.
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Print object name
+        Debug.Log("Standing on: " + hit.collider.tag);
+
+    }
+
     private void Start()
     {
         if (!isLocalPlayer)
@@ -171,7 +196,6 @@ public class PlayerMovement : NetworkBehaviour
         {
             audioTimer += Time.deltaTime;
         }
-
 
         // Enable landing sound when falling velocity exceeds 4ups
         if (_controller.velocity.y <= -4 && m_PreviouslyGrounded)
@@ -342,6 +366,7 @@ public class PlayerMovement : NetworkBehaviour
             AirControl(wishdir, wishspeed2);
         // !CPM: Aircontrol
 
+
         // Apply gravity
         playerVelocity.y -= gravity * Time.deltaTime;
     }
@@ -501,4 +526,25 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     #endregion
+
+
+    /*
+    // Surf test, using trigger around player. Scale down trigger + move it under the player?           collisionenter using rigidbody?
+    // Player controller ground check + tag?
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.tag == "Surf")
+        {
+            surfing = true;
+        }
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (collider.tag == "Surf")
+        {
+            surfing = false;
+        }
+    }
+    */
 }
