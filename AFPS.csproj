@@ -301,6 +301,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="AFPS.Plugins.csproj">
+      <Project>{D5821B24-E1A4-ECD8-3366-B8D4765F2B5A}</Project>
+      <Name>AFPS.Plugins</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Assets\AFPS\Networking.cs" />
     <Compile Include="Assets\AFPS\ReadME.cs" />
     <Compile Include="Assets\AFPS\Scripts\Crosshair.cs" />

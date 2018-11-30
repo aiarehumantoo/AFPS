@@ -301,6 +301,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="AFPS.Plugins.csproj">
+      <Project>{D5821B24-E1A4-ECD8-3366-B8D4765F2B5A}</Project>
+      <Name>AFPS.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="AFPS.csproj">
       <Project>{F917FF65-0F6F-5B07-5ADE-05D61E94FE80}</Project>
       <Name>AFPS</Name>

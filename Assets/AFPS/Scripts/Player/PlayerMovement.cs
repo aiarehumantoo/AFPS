@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;   // Networking namespace
+using UnityStandardAssets.Utility;  // Utility scripts
 
 // Quake 3 arena
 // https://github.com/id-Software/Quake-III-Arena/blob/master/code/game/bg_pmove.c
@@ -21,7 +22,9 @@ using UnityEngine.Networking;   // Networking namespace
  *      when touching ramp, 0 gravity, higher aircontrol airmove()
  *      might need to write source style physics to get rid of w+a/d strafing when surfing
  * 
- * 
+ * Audio:
+ *      proper audio system
+ *      remove now unncessary temp. fixes. (since ground check works properly now)
  */
 
 
@@ -66,7 +69,7 @@ public class PlayerMovement : NetworkBehaviour
     #region MouseControls
     [Header("Mouse")]
     //Camera
-    public Transform playerView;
+    public Transform playerView;            // Camera
     public float playerViewYOffset = 0.6f; // The height at which the camera is bound to
     public float xMouseSensitivity = 20.0f;
     public float yMouseSensitivity = 20.0f;
@@ -113,10 +116,20 @@ public class PlayerMovement : NetworkBehaviour
 
 
 
-
-
-
     // TESTING
+
+    // Headbob
+    bool useHeadBob;
+    //[SerializeField] private bool useFovKick;
+    //[SerializeField] private FOVKick fovKick = new FOVKick();
+    [SerializeField] private CurveControlledBob headBob = new CurveControlledBob();
+    [SerializeField] private LerpControlledBob jumpBob = new LerpControlledBob();
+    [SerializeField] private float stepInterval;
+    private Vector3 originalCameraPosition;
+
+
+
+    // Surfing
     private bool isSurfing = false; // is on a slope or not
     public float slideFriction = 0.3f; // ajusting the friction of the slope
     private Vector3 hitNormal; //orientation of the slope.
@@ -149,7 +162,30 @@ public class PlayerMovement : NetworkBehaviour
         // or airmove() + add sliding calculations to end of it if player is touching a slope
     }
 
+    private void UpdateCameraPosition()
+    {
+        Vector3 newCameraPosition;
+        if (!useHeadBob)
+        {
+            return;
+        }
+        if (_controller.velocity.magnitude > 0 && _controller.isGrounded)
+        {
+            playerView.transform.localPosition = headBob.DoHeadBob(_controller.velocity.magnitude);
+            newCameraPosition = playerView.transform.localPosition;
+            newCameraPosition.y = playerView.transform.localPosition.y - jumpBob.Offset();
+        }
+        else
+        {
+            newCameraPosition = playerView.transform.localPosition;
+            newCameraPosition.y = originalCameraPosition.y - jumpBob.Offset();
+        }
 
+        playerView.transform.localPosition = newCameraPosition;
+
+
+        // + play walking sound on each step
+    }
 
 
 
@@ -160,6 +196,11 @@ public class PlayerMovement : NetworkBehaviour
         {
             return;
         }
+
+        // Headbob
+        useHeadBob = true;
+        originalCameraPosition = playerView.transform.localPosition;
+        headBob.Setup(playerView.GetComponent<Camera>(), stepInterval);
 
         // Enable camera / audio listener. This way these are active only on local player
         //playerView.gameObject.SetActive(true);
@@ -275,7 +316,9 @@ public class PlayerMovement : NetworkBehaviour
 
         //Need to move the camera after the player has been moved because otherwise the camera will clip the player if going fast enough and will always be 1 frame behind.
         // Set the camera's position to the transform
-        playerView.position = new Vector3(transform.position.x, transform.position.y + playerViewYOffset, transform.position.z);
+        //playerView.position = new Vector3(transform.position.x, transform.position.y + playerViewYOffset, transform.position.z);
+
+        UpdateCameraPosition();
 
         #endregion
     }

@@ -12,7 +12,7 @@ public class KillBox : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if(kill)    // Kill player
+        if(kill)    // Kill player. Should just directly set player to death state but whatever
         {
             if (other.tag == "Player")
             {
