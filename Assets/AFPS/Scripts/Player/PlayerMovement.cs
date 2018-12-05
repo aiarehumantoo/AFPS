@@ -150,13 +150,20 @@ public class PlayerMovement : NetworkBehaviour
 
     void SurfMove()
     {
-        // Sliding on slopes
+        // Sliding on slopes,no player input
         if (isSurfing)          //unncessary, already in update()
         {
             playerVelocity.x += (1f - hitNormal.y) * hitNormal.x * (speed - slideFriction);
             playerVelocity.z += (1f - hitNormal.y) * hitNormal.z * (speed - slideFriction);
         }
 
+        // player input towards the ramp negates sliding down
+        // ie looking directly forward + holding down left movement key while ramp is on the left side
+        // then controlling direction with camera angle
+        // surfing with upwards angle reduces speed, downwards angle accelerates
+
+
+        //???
         // + aircontrol from airmove()
         // or just sliding on a slope + airmove when not touching it
         // or airmove() + add sliding calculations to end of it if player is touching a slope
