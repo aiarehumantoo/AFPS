@@ -42,10 +42,12 @@ public class SelectWeapon : NetworkBehaviour
         //NetworkServer.Spawn(GO);
     }
 
-    void OnPlayerConnected(NetworkPlayer player)
+    /*
+    void OnPlayerConnected(NetworkPlayer player)        //obsolete. use unity multiplayer and NetworkIdentity instead
     {
         //NetworkServer.Spawn(startingWeapon);
     }
+    */
 
     // Update is called once per frame
     void Update()

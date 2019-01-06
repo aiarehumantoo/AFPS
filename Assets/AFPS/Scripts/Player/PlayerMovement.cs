@@ -589,7 +589,7 @@ public class PlayerMovement : NetworkBehaviour
         //Debug.Log("landing sound");
         //m_PlaySounds = m_LandingSounds;       // no unique landing sounds yet
         m_PlaySounds = m_JumpSounds;
-        PlayRandomAudio();
+        //PlayRandomAudio();
     }
 
     private void PlayFootStepAudio()
