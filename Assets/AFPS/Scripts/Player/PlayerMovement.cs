@@ -29,7 +29,7 @@ using UnityStandardAssets.Utility;  // Utility scripts
 
 
 // Notes:
-// To fix playspeed bug, just open Edit>Project settings>Time.
+// To fix playspeed bug, just open Edit>Project settings>Time. Problem with editor?
 
 
 // Contains the command the user wishes upon the character
@@ -102,6 +102,12 @@ public class PlayerMovement : NetworkBehaviour
     bool m_PreviouslyGrounded = true;
 
     #endregion
+
+    // Abilities
+    float dodgeSpeed = 40.0f;
+    float dodgeCooldown = 1.5f;
+    float dodgeTimer;
+
 
     #region DoubleJumpVariables
     //Variables for doublejump. Second jump within is higher, expires after short period
@@ -260,7 +266,10 @@ public class PlayerMovement : NetworkBehaviour
 
         #region Movement
 
+        Dodge();
         QueueJump();
+
+        dodgeTimer += Time.deltaTime;
 
         // Add the time since Update was last called to the timer. Count up to 1 second.
         if (timer < 1.0f)
@@ -273,7 +282,7 @@ public class PlayerMovement : NetworkBehaviour
             audioTimer += Time.deltaTime;
         }
 
-        // Enable landing sound when falling velocity exceeds 4ups
+        // Enable landing sound when falling velocity exceeds 4ups                      // Unnecessary. Fixed vertical stuttering already
         if (_controller.velocity.y <= -4 && m_PreviouslyGrounded)
         {
             //Debug.Log("landing sound enabled");
@@ -340,6 +349,23 @@ public class PlayerMovement : NetworkBehaviour
     {
         // Change player velocity
         playerVelocity = dir;
+    }
+
+    // Dodge ability. Fast slide to current direction.
+    // Should work well for singleplayer w/ melee/projectile/telegraphed,charged hitscan enemies (dodgeable attacks)
+    // Playtest if feels okay for player vs player
+    // Additional restrictions so that it cant be chained with strafe jumping?
+    private void Dodge()
+    {
+        if (_controller.isGrounded)
+        {
+            if (Input.GetButton("Fire2") && dodgeTimer >= dodgeCooldown)
+            {
+                // Current direction (normalized) * force
+                playerVelocity = playerVelocity.normalized * dodgeSpeed;
+                dodgeTimer = 0;
+            }
+        }
     }
 
     private void SetMovementDir()

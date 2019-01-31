@@ -100,8 +100,15 @@ public class Projectile : NetworkBehaviour
     }   
 
     //void HitPlayer(Collider other, int dmg, Vector3 force)
-    void HitPlayer(string _ID, int dmg, Vector3 force)
+    void HitPlayer(string _ID, int dmg, Vector3 force)                      // Deal damage
     {
+        // Self dmg
+        if (_ID == shooterID)
+        {
+            dmg = 0;
+            // dmg *= 0.5f;     // Reduce self dmg to half.         Fix health first. int -> float
+        }
+
         // If the Health component exists...
         //PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
         PlayerHealth playerHealth = GameObject.Find(_ID).GetComponent<PlayerHealth>();
