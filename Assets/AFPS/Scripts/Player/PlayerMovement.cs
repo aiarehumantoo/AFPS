@@ -15,9 +15,7 @@ using UnityStandardAssets.Utility;  // Utility scripts
 
 
 /*TODO:
- * 
- * Fixed player stuttering between air and ground. clean up now unnecessary workarounds. (sounds etc.)
- * 
+ *  
  * Surfing:
  *      when touching ramp, 0 gravity, higher aircontrol airmove()
  *      might need to write source style physics to get rid of w+a/d strafing when surfing
@@ -91,6 +89,7 @@ public class PlayerMovement : NetworkBehaviour
     #region MovementVariables
     //Variables for movement
 
+    bool useCPM = false;                        // True = CPM, False = VQ3
     float moveSpeed = 7.0f; //7                     // Ground move speed
     float runAcceleration = 14.0f; //14         // Ground accel
     float runDeacceleration = 10.0f; //10       // Deacceleration that occurs when running on the ground
@@ -101,10 +100,6 @@ public class PlayerMovement : NetworkBehaviour
     float sideStrafeSpeed = 1.0f; //1               // What the max speed to generate when side strafing
     float jumpSpeed = 8.0f; //8                // The speed at which the character's up axis gains when hitting jump
 
-    float moveScale = 1.0f; //remove?
-
-    bool m_PreviouslyGrounded = true;
-
     #endregion
 
     // Abilities
@@ -113,26 +108,17 @@ public class PlayerMovement : NetworkBehaviour
     float dodgeTimer;
 
 
-    #region DoubleJumpVariables
-    //Variables for doublejump. Second jump within is higher, expires after short period
 
-    float timer = 1.0f;                             // Timer.
-    float doubleJumpWindow = 0.6f;                  // How long player has time to perform second,  higher jump.
-    float doubleJumpSpeed = 15.0f;
-
-    #endregion
 
     private CharacterController _controller;
 
 
 
     // TESTING
-
-
-    bool useCPM = false;   // True = CPM, False = VQ3
+    //=================
 
     // Headbob
-    bool useHeadBob;
+    bool useHeadBob = false;
     //[SerializeField] private bool useFovKick;
     //[SerializeField] private FOVKick fovKick = new FOVKick();
     [SerializeField] private CurveControlledBob headBob = new CurveControlledBob();
@@ -140,6 +126,10 @@ public class PlayerMovement : NetworkBehaviour
     [SerializeField] private float stepInterval;
     private Vector3 originalCameraPosition;
 
+    // Doublejump
+    float timer = 1.0f;                             // Timer.
+    float doubleJumpWindow = 0.6f;                  // How long player has time to perform second,  higher jump.
+    float doubleJumpSpeed = 15.0f;
 
 
     // Surfing
@@ -150,8 +140,10 @@ public class PlayerMovement : NetworkBehaviour
 
     float slideSpeed = 6f;
 
-    // OnControllerColliderHit is called when the controller hits a collider while performing a Move.
-    // This can be used to push objects when they collide with the character.
+    //=================
+
+
+    // Tag of the object player is standing on
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         // Print object name
@@ -218,7 +210,6 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         // Headbob
-        useHeadBob = false; //true
         originalCameraPosition = playerView.transform.localPosition;
         headBob.Setup(playerView.GetComponent<Camera>(), stepInterval);
 
@@ -288,13 +279,6 @@ public class PlayerMovement : NetworkBehaviour
             audioTimer += Time.deltaTime;
         }
 
-        // Enable landing sound when falling velocity exceeds 4ups                      // Unnecessary. Fixed vertical stuttering already
-        if (_controller.velocity.y <= -4 && m_PreviouslyGrounded)
-        {
-            //Debug.Log("landing sound enabled");
-            m_PreviouslyGrounded = false;
-        }
-
         if (isSurfing)
         {
             SurfMove();
@@ -302,26 +286,14 @@ public class PlayerMovement : NetworkBehaviour
         else if (_controller.isGrounded)
         {
             GroundMove();
-
-            // Current code resets vertical velocity when player touches the ground. So its like ground --> air --> ground cycle, results in audio spam. FIX            Either change how gravity works or require set amount of air time before landing sound can be triggered
-            // Landing
-            if (!m_PreviouslyGrounded)
-            {
-                m_PreviouslyGrounded = true;
-                PlayLandingSound();
-                //Debug.Log("landing sound disabled");
-            }
-            else if ((playerVelocity.x >= 1 || playerVelocity.z >= 1) && audioTimer >= timeBetweenFootSteps)     // Quick & dirty check if player is moving + delay between sounds
-            {
-                audioTimer = 0f;
-                PlayFootStepAudio();
-            }
         }
         else if (!_controller.isGrounded)
         {
-            //m_PreviouslyGrounded = false;
             AirMove();
         }
+
+        //Clean up timers,sounds,player state check^^^^^^^^^^^^^^^^^^
+
 
         // Move the controller
         _controller.Move(playerVelocity * Time.deltaTime);
@@ -396,8 +368,6 @@ public class PlayerMovement : NetworkBehaviour
 
     private void GroundMove()
     {
-        //TODO; remake or tweak for snappier controls.
-
         Vector3 wishdir;
 
         // Do not apply friction if the player is queueing up the next jump
@@ -406,10 +376,6 @@ public class PlayerMovement : NetworkBehaviour
         else
             ApplyFriction(0);
 
-        //with scaling
-        //float scale = InputScale();
-
-        //without scaling
         SetMovementDir();
 
         wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
@@ -457,11 +423,6 @@ public class PlayerMovement : NetworkBehaviour
         float wishvel = airAcceleration;
         float accel;
 
-        //with scaling
-        //float scale = InputScale();
-        //SetMovementDir();
-
-        //without scaling
         SetMovementDir();
 
         wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
@@ -472,9 +433,6 @@ public class PlayerMovement : NetworkBehaviour
 
         wishdir.Normalize();
         moveDirectionNorm = wishdir;
-
-        //with scaling
-        //wishspeed *= scale;
 
         // CPM: Aircontrol
         if (useCPM)
@@ -614,25 +572,6 @@ public class PlayerMovement : NetworkBehaviour
         playerVelocity.z += accelspeed * wishdir.z;
     }
 
-    // Not used anymore
-    private float InputScale()
-    {
-        int max;
-        float total;
-        float scale;
-
-        max = (int)Mathf.Abs(_inputs.forwardMove);
-        if (Mathf.Abs(_inputs.rightMove) > max)
-            max = (int)Mathf.Abs(_inputs.rightMove);
-        if (max <= 0)
-            return 0;
-
-        total = Mathf.Sqrt(_inputs.forwardMove * _inputs.forwardMove + _inputs.rightMove * _inputs.rightMove);
-        scale = moveSpeed * max / (moveScale * total);
-
-        return scale;
-    }
-
 
 
     public void Settings()
@@ -647,9 +586,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private void PlayJumpSound()
     {
-        return;
-
-        //Debug.Log("jump sound");
+        // Play random jump audio
         m_PlaySounds = m_JumpSounds;
         PlayRandomAudio();
     }
@@ -692,25 +629,4 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     #endregion
-
-
-    /*
-    // Surf test, using trigger around player. Scale down trigger + move it under the player?           collisionenter using rigidbody?
-    // Player controller ground check + tag?
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.tag == "Surf")
-        {
-            surfing = true;
-        }
-    }
-
-    void OnTriggerExit(Collider collider)
-    {
-        if (collider.tag == "Surf")
-        {
-            surfing = false;
-        }
-    }
-    */
 }
