@@ -25,6 +25,9 @@ using UnityStandardAssets.Utility;  // Utility scripts
  * Audio:
  *      proper audio system
  *      remove now unncessary temp. fixes. (since ground check works properly now)
+ *      
+ * Misc:
+ *      Cleaning up unnecessary code / remaking badly made test bits
  */
 
 
@@ -42,8 +45,8 @@ struct Inputs
 
 public class PlayerMovement : NetworkBehaviour
 {
-    float gravity = 20.0f;      // Gravity
-    float friction = 6;         // Ground friction
+    float gravity = 25.0f; //20      // Gravity
+    float friction = 6; //6        // Ground friction
 
     // Q3: players can queue the next jump just before he hits the ground
     private bool wishJump = false;
@@ -88,16 +91,17 @@ public class PlayerMovement : NetworkBehaviour
     #region MovementVariables
     //Variables for movement
 
-    float moveSpeed = 7.0f;                     // Ground move speed
-    float runAcceleration = 14.0f; //10         // Ground accel
-    float runDeacceleration = 10.0f; //6       // Deacceleration that occurs when running on the ground
-    float airAcceleration = 2.0f; //0.1          // Air accel
-    float airDecceleration = 2.0f; //0.1         // Deacceleration experienced when ooposite strafing
-    float airControl = 0.3f;                    // How precise air control is
-    float sideStrafeAcceleration = 50.0f; //100  // How fast acceleration occurs to get up to sideStrafeSpeed when
-    float sideStrafeSpeed = 1.0f;               // What the max speed to generate when side strafing
-    float jumpSpeed = 8.0f; //7                // The speed at which the character's up axis gains when hitting jump
-    float moveScale = 1.0f;
+    float moveSpeed = 7.0f; //7                     // Ground move speed
+    float runAcceleration = 14.0f; //14         // Ground accel
+    float runDeacceleration = 10.0f; //10       // Deacceleration that occurs when running on the ground
+    float airAcceleration = 2.0f; //2          // Air accel
+    float airDecceleration = 2.0f; //2         // Deacceleration experienced when ooposite strafing
+    float airControl = 0.3f; //0.3                    // How precise air control is
+    float sideStrafeAcceleration = 50.0f; //50  // How fast acceleration occurs to get up to sideStrafeSpeed when
+    float sideStrafeSpeed = 1.0f; //1               // What the max speed to generate when side strafing
+    float jumpSpeed = 8.0f; //8                // The speed at which the character's up axis gains when hitting jump
+
+    float moveScale = 1.0f; //remove?
 
     bool m_PreviouslyGrounded = true;
 
@@ -123,6 +127,9 @@ public class PlayerMovement : NetworkBehaviour
 
 
     // TESTING
+
+
+    bool useCPM = false;   // True = CPM, False = VQ3
 
     // Headbob
     bool useHeadBob;
@@ -211,7 +218,7 @@ public class PlayerMovement : NetworkBehaviour
         }
 
         // Headbob
-        useHeadBob = true;
+        useHeadBob = false; //true
         originalCameraPosition = playerView.transform.localPosition;
         headBob.Setup(playerView.GetComponent<Camera>(), stepInterval);
 
@@ -233,7 +240,8 @@ public class PlayerMovement : NetworkBehaviour
         Settings();
     }
 
-    private void Update()           // Unity documentation recommends calling charactercontroller.move only once per frame -> void Update() but FixedUpdate() is not linked to framerate
+    private void Update()           // Unity documentation recommends calling charactercontroller.move only once per frame -> void Update() but FixedUpdate() is not linked to framerate and therefore should be more consistent
+    //private void FixedUpdate()
     {
         if (!isLocalPlayer)
         {
@@ -268,8 +276,6 @@ public class PlayerMovement : NetworkBehaviour
 
         Dodge();
         QueueJump();
-
-        dodgeTimer += Time.deltaTime;
 
         // Add the time since Update was last called to the timer. Count up to 1 second.
         if (timer < 1.0f)
@@ -354,9 +360,11 @@ public class PlayerMovement : NetworkBehaviour
     // Dodge ability. Fast slide to current direction.
     // Should work well for singleplayer w/ melee/projectile/telegraphed,charged hitscan enemies (dodgeable attacks)
     // Playtest if feels okay for player vs player
-    // Additional restrictions so that it cant be chained with strafe jumping?
+    // Additional restrictions so that it cant be chained with strafe jumping? Could work well but also makes circle jumping pointless
     private void Dodge()
     {
+        dodgeTimer += Time.deltaTime;
+
         if (_controller.isGrounded)
         {
             if (Input.GetButton("Fire2") && dodgeTimer >= dodgeCooldown)
@@ -442,6 +450,9 @@ public class PlayerMovement : NetworkBehaviour
 
     private void AirMove()
     {
+        AirMoveVQ3();
+        return;
+
         Vector3 wishdir;
         float wishvel = airAcceleration;
         float accel;
@@ -466,27 +477,57 @@ public class PlayerMovement : NetworkBehaviour
         //wishspeed *= scale;
 
         // CPM: Aircontrol
-        float wishspeed2 = wishspeed;
-        if (Vector3.Dot(playerVelocity, wishdir) < 0)
-            accel = airDecceleration;
-        else
-            accel = airAcceleration;
-        // If the player is ONLY strafing left or right
-        if (_inputs.forwardMove == 0 && _inputs.rightMove != 0)
+        if (useCPM)
         {
-            if (wishspeed > sideStrafeSpeed)
-                wishspeed = sideStrafeSpeed;
-            accel = sideStrafeAcceleration;
+            float wishspeed2 = wishspeed;
+            if (Vector3.Dot(playerVelocity, wishdir) < 0)
+                accel = airDecceleration;
+            else
+                accel = airAcceleration;
+            // If the player is ONLY strafing left or right
+            if (_inputs.forwardMove == 0 && _inputs.rightMove != 0)
+            {
+                if (wishspeed > sideStrafeSpeed)
+                    wishspeed = sideStrafeSpeed;
+                accel = sideStrafeAcceleration;
+            }
+
+            Accelerate(wishdir, wishspeed, accel);
+            if (airControl > 0)
+                AirControl(wishdir, wishspeed2);
+            // !CPM: Aircontrol
         }
-
-        Accelerate(wishdir, wishspeed, accel);
-        if (airControl > 0)
-            AirControl(wishdir, wishspeed2);
-        // !CPM: Aircontrol
-
+        else // VQ3
+        {
+            Accelerate(wishdir, wishspeed, airAcceleration);
+        }
 
         // Apply gravity
         playerVelocity.y -= gravity * Time.deltaTime;
+    }
+
+    private void AirMoveVQ3() //Q3 PM_AirMove
+    {
+        Vector3 wishdir;
+
+        SetMovementDir();
+
+        wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
+        wishdir = transform.TransformDirection(wishdir);
+
+        // Changing the order here results in different acceleration!!!
+        // merge both so that acceleration is the same and only difference is in air control
+        wishdir.Normalize();
+        moveDirectionNorm = wishdir;
+        float wishspeed = wishdir.magnitude;
+        wishspeed *= moveSpeed;
+        //=============
+
+        Accelerate(wishdir, wishspeed, airAcceleration);  
+
+        // Apply gravity
+        playerVelocity.y -= gravity * Time.deltaTime;
+
     }
 
     private void AirControl(Vector3 wishdir, float wishspeed)
@@ -573,6 +614,7 @@ public class PlayerMovement : NetworkBehaviour
         playerVelocity.z += accelspeed * wishdir.z;
     }
 
+    // Not used anymore
     private float InputScale()
     {
         int max;
@@ -605,6 +647,8 @@ public class PlayerMovement : NetworkBehaviour
 
     private void PlayJumpSound()
     {
+        return;
+
         //Debug.Log("jump sound");
         m_PlaySounds = m_JumpSounds;
         PlayRandomAudio();
@@ -612,6 +656,8 @@ public class PlayerMovement : NetworkBehaviour
 
     private void PlayLandingSound()
     {
+        return;
+
         //Debug.Log("landing sound");
         //m_PlaySounds = m_LandingSounds;       // no unique landing sounds yet
         m_PlaySounds = m_JumpSounds;
@@ -620,6 +666,8 @@ public class PlayerMovement : NetworkBehaviour
 
     private void PlayFootStepAudio()
     {
+        return;
+
         //Debug.Log("footstep sound");
         m_PlaySounds = m_JumpSounds;
         //m_PlaySounds = m_FootStepSounds;      // no unique footstep sounds yet
