@@ -26,6 +26,13 @@ public class Projectile : NetworkBehaviour
         transform.name = "Projectile of " + shooterID;
     }
 
+    // Trigger vs physics.overlapshere?
+
+    // Collision detection:
+    // Discrete + 0.00666667 timestep           // Is accurate
+    // VS
+    // Continuous speculative + 0.02           // Likely less resource intensive but prediction might sometimes cause inaccuracy? Also less smooth. Use interpolation instead of raw update frequency?
+
     void OnTriggerEnter(Collider other)
     {
         // Ignore player that shot the projectile                                       // With networking and [SyncVar] client side projectiles work as expected (since required variables reach clients). However Unity documentation said something about networking only player controlled objects. or was it just about sending [Command]`s?

@@ -10,8 +10,11 @@ using UnityStandardAssets.Utility;  // Utility scripts
 // CPM dev diary
 // http://games.linuxdude.com/tamaps/archive/cpm1_dev_docs/
 
-// Original Quake 3 physics port;
+// Original Quake 3 physics port
 // https://github.com/Zinglish/quake3-movement-unity3d/blob/master/CPMPlayer.js
+
+// Source engine movement code
+// https://github.com/ValveSoftware/source-sdk-2013/blob/56accfdb9c4abd32ae1dc26b2e4cc87898cf4dc1/sp/src/game/shared/gamemovement.cpp
 
 
 /*TODO:
@@ -89,6 +92,7 @@ public class PlayerMovement : NetworkBehaviour
     #region MovementVariables
     //Variables for movement
 
+    // CPM / VQ3
     bool useCPM = false;                        // True = CPM, False = VQ3
     float moveSpeed = 7.0f; //7                     // Ground move speed
     float runAcceleration = 14.0f; //14         // Ground accel
@@ -99,6 +103,10 @@ public class PlayerMovement : NetworkBehaviour
     float sideStrafeAcceleration = 50.0f; //50  // How fast acceleration occurs to get up to sideStrafeSpeed when
     float sideStrafeSpeed = 1.0f; //1               // What the max speed to generate when side strafing
     float jumpSpeed = 8.0f; //8                // The speed at which the character's up axis gains when hitting jump
+
+    // Source
+    float maxVelGround = 7;
+    float maxVelAir = 25;
 
     #endregion
 
@@ -368,6 +376,9 @@ public class PlayerMovement : NetworkBehaviour
 
     private void GroundMove()
     {
+        //GroundMoveSource(playerVelocity); // Current velocity of the player, before any calculations
+        //return;
+
         Vector3 wishdir;
 
         // Do not apply friction if the player is queueing up the next jump
@@ -416,8 +427,9 @@ public class PlayerMovement : NetworkBehaviour
 
     private void AirMove()
     {
-        AirMoveVQ3();
-        return;
+        //AirMoveVQ3();
+        //AirMoveSource(playerVelocity);
+        //return;
 
         Vector3 wishdir;
         float wishvel = airAcceleration;
@@ -475,6 +487,8 @@ public class PlayerMovement : NetworkBehaviour
 
         // Changing the order here results in different acceleration!!!
         // merge both so that acceleration is the same and only difference is in air control
+        // Different for VQ3 and CPM?
+        // double check source codes for order of input calculations. Groundmove, Airmove CPM & VQ3
         wishdir.Normalize();
         moveDirectionNorm = wishdir;
         float wishspeed = wishdir.magnitude;
@@ -629,4 +643,83 @@ public class PlayerMovement : NetworkBehaviour
     }
 
     #endregion
+
+
+
+    // Source movement test
+    //=============================
+    // TODO;
+    // VQ3/CPM variable names
+    // Might need alternate movement variables instead of using VQ3 settings
+
+    //private void GroundMoveSource(Vector3 accelDir, Vector3 prevVelocity)
+    private void GroundMoveSource(Vector3 prevVelocity)
+    {
+        Vector3 wishdir;    // normalized direction that the player has requested to move (taking into account the movement keys and look direction)
+        SetMovementDir();
+        wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
+        wishdir = transform.TransformDirection(wishdir);
+        wishdir.Normalize();
+        moveDirectionNorm = wishdir;
+
+        // Apply Friction
+        float speed = prevVelocity.magnitude;
+        if (speed != 0) // To avoid divide by zero errors
+        {
+            float drop = speed * friction * Time.fixedDeltaTime;
+            prevVelocity *= Mathf.Max(speed - drop, 0) / speed; // Scale the velocity based on friction.
+        }
+
+        //AccelerateSource(accelDir, prevVelocity, runAcceleration, maxVelGround);
+        AccelerateSource(wishdir, prevVelocity, runAcceleration, maxVelGround);
+
+        // Reset the gravity velocity           
+        playerVelocity.y = -gravity * Time.deltaTime;
+
+        if (wishJump) //jump
+        {
+            playerVelocity.y = jumpSpeed;
+            PlayJumpSound();
+            wishJump = false;
+        }
+    }
+
+    //private void AirMoveSource(Vector3 accelDir, Vector3 prevVelocity)
+    private void AirMoveSource(Vector3 prevVelocity)
+    {
+        Vector3 wishdir;    // normalized direction that the player has requested to move (taking into account the movement keys and look direction)
+        SetMovementDir();
+        wishdir = new Vector3(_inputs.rightMove, 0, _inputs.forwardMove);
+        wishdir = transform.TransformDirection(wishdir);
+        wishdir.Normalize();
+        moveDirectionNorm = wishdir;
+
+        //AccelerateSource(accelDir, prevVelocity, airAcceleration, maxVelAir);
+        AccelerateSource(wishdir, prevVelocity, airAcceleration, maxVelAir);
+
+        // Apply gravity
+        playerVelocity.y -= gravity * Time.deltaTime;
+    }
+
+    private void AccelerateSource(Vector3 accelDir, Vector3 prevVelocity, float accelerate, float max_velocity)
+    {
+        float projVel = Vector3.Dot(prevVelocity, accelDir); // Vector projection of Current velocity onto accelDir.
+        float accelVel = accelerate * Time.fixedDeltaTime; // Accelerated velocity in direction of movment
+
+        // If necessary, truncate the accelerated velocity so the vector projection does not exceed max_velocity
+        if (projVel + accelVel > max_velocity)
+        {
+            accelVel = max_velocity - projVel;
+        }
+
+        //return prevVelocity + accelDir * accelVel;
+
+        //Set player velocity
+        //playerVelocity.x += accelVel * accelDir.x;
+        //playerVelocity.z += accelVel * accelDir.z;
+        playerVelocity = prevVelocity + accelVel * accelDir;
+    }
+
+    //=============================
+
 }

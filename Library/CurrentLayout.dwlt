@@ -114,7 +114,7 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 498}
   m_MaxSize: {x: 14004, y: 14048}
   vertical: 0
-  controlID: 114
+  controlID: 74
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 498}
   m_MaxSize: {x: 10002, y: 14048}
   vertical: 1
-  controlID: 115
+  controlID: 75
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_MinSize: {x: 406, y: 224}
   m_MaxSize: {x: 8006, y: 4024}
   vertical: 0
-  controlID: 116
+  controlID: 76
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -340,20 +340,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/AFPS/Prefabs/Player
+    - Assets/AFPS/Prefabs/Weapons/Projectiles
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/AFPS/Prefabs/Player
+  - Assets/AFPS/Prefabs/Weapons/Projectiles
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\Program Files\Unity projects\AFPS
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: fc0e0000
-    m_LastClickedID: 3836
-    m_ExpandedIDs: 000000000c0b00000c0c00001a0f0000b80f000000ca9a3b
+    m_SelectedIDs: fc0d0000
+    m_LastClickedID: 3580
+    m_ExpandedIDs: 000000000c0b00000c0c00001a0f0000b80f00003010000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -637,9 +637,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.054244697, y: -0.93876183, z: 0.2923214, w: -0.17416082}
   m_Size:
-    m_Target: 17.84748
+    m_Target: 21.283451
     speed: 2
-    m_Value: 17.84748
+    m_Value: 21.283451
   m_Ortho:
     m_Target: 0
     speed: 2
