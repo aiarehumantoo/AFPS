@@ -127,7 +127,7 @@ public class PlayerMovement : NetworkBehaviour
 
     // Headbob
     bool useHeadBob = false;
-    //[SerializeField] private bool useFovKick;
+    //[SerializeField] private bool useFovKick;                                         // Serialized variables are visible in the inspector just like public values (regardless if public or not)
     //[SerializeField] private FOVKick fovKick = new FOVKick();
     [SerializeField] private CurveControlledBob headBob = new CurveControlledBob();
     [SerializeField] private LerpControlledBob jumpBob = new LerpControlledBob();
